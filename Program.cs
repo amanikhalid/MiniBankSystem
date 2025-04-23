@@ -55,13 +55,13 @@
             }
 
             Console.WriteLine("Thank you for using the SafeBank System. Goodbye!");
-  
+
         }
 
         // User Menu:
         static void UserMenu()
         {
-            bool inUserMenu= true;
+            bool inUserMenu = true;
 
             while (inUserMenu)
             {
@@ -100,7 +100,7 @@
                         break;
                 }
             }
- 
+
         }
 
         // Admin Menu:
@@ -149,13 +149,13 @@
             Console.WriteLine("Enter your Full Name:");
             string name = Console.ReadLine();
 
-            Console.WriteLine("Enter your valid National ID"); 
+            Console.WriteLine("Enter your valid National ID");
             string nationalID = Console.ReadLine();
 
             string accountRequest = name + "|" + nationalID;
 
             Queue<string> queue = new Queue<string>();// Create a new queue for each request
-            queue.Enqueue(accountRequest); 
+            queue.Enqueue(accountRequest);
 
             //CreateAccountRequests.Enqueue((name, nationalID));
             createAccountRequests.Enqueue(accountRequest);
@@ -193,7 +193,7 @@
             if (index == -1) return; // Check if account exists
             try // Check if input is valid
             {
-                Console.WriteLine("Enter the amount to deposit:"); 
+                Console.WriteLine("Enter the amount to deposit:");
                 double amount = Convert.ToDouble(Console.ReadLine());
 
                 if (amount <= 0) // Check if amount is positive
@@ -201,12 +201,12 @@
                     Console.WriteLine("Invalid amount. Please enter a positive number.");
                     return;
                 }
-                
+
                 accountBalances[index] += amount; // Update balance
                 Console.WriteLine("Deposit successful.");
 
             }
-            catch 
+            catch
             {
                 Console.WriteLine("Invalid input. Please enter a valid number.");
             }
@@ -222,7 +222,7 @@
                 Console.WriteLine("Enter the amount to withdraw:");
                 double amount = Convert.ToDouble(Console.ReadLine());
                 if (amount <= 0) // Check if amount is positive
-              
+
                 {
                     Console.WriteLine("Invalid amount. Please enter a positive number.");
                     return;
@@ -236,7 +236,7 @@
                 Console.WriteLine("Withdrawal successful.");
             }
             catch // Catch any exceptions
-           
+
             {
                 Console.WriteLine("Invalid input. Please enter a valid number.");
             }
@@ -246,12 +246,40 @@
         {
             int index = GetAccountIndex();
             if (index == -1) return; // Check if account exists
-            Console.WriteLine($"Account Number: {accountNumbers[index]}");
-            Console.WriteLine($"Account Holder: {accountNames[index]}");
+            Console.WriteLine($"Account Number: {accountNumbers[index]}"); // Display account number
+            Console.WriteLine($"Account Holder: {accountNames[index]}"); // Display account holder name
             Console.WriteLine($"Your current balance is: {accountBalances[index]}");
         }
 
+        // Submit Review
+        static void SubmitReview()
+        {
+            Console.WriteLine("Enter your review/complaint:");
+            string review = Console.ReadLine();
+            reviewStack.Push(review);
+            Console.WriteLine("Your review has been submitted successfully.");
+        }
 
-    }
+        static void SaveAccountsInformationToFile()
+        {
+            try // Save account information to file
+            {
+                using (StreamWriter writer = new StreamWriter(AccountsFilePath))
+                {
+                    for (int i = 0; i < accountNumbers.Count; i++) // Loop through all accounts
+                    {
+                        string dataLine = $"{accountNumbers[i]}|{accountNames[i]}|{accountBalances[i]}";
+                        writer.WriteLine(dataLine);
+                    }
+                }
+                Console.WriteLine("Accounts information saved successfully.");
 
-}
+            }
+            catch (Exception ex) // Handle any exceptions
+            {
+                Console.WriteLine($"Error saving accounts information: {ex.Message}");
+            }
+
+
+        }
+}   } 
