@@ -55,6 +55,90 @@
             }
 
             Console.WriteLine("Thank you for using the SafeBank System. Goodbye!");
+
+            // User Menu:
+            static void UserMenu()
+            {
+               bool inUserMenu() = true;
+
+                while (inUserMenu)
+                {
+                    Console.Clear();
+                    Console.WriteLine("\nUser Menu");
+                    Console.WriteLine("1. Create Account Request");
+                    Console.WriteLine("2. Deposit Money");
+                    Console.WriteLine("3. Withdraw Money");
+                    Console.WriteLine("4. Check/View Balance");
+                    Console.WriteLine("5. Submit Review/Complaint");
+                    Console.WriteLine("0. Return to Main Menu");
+                    Console.WriteLine("Select option: ");
+                    string userChoice = Console.ReadLine();
+                    switch (userChoice)
+                    {
+                        case "1":
+                            CreateAccountRequest();
+                            break;
+                        case "2":
+                            DepositMoney();
+                            break;
+                        case "3":
+                            WithdrawMoney();
+                            break;
+                        case "4":
+                            ViewBalance();
+                            break;
+                        case "5":
+                            SubmitReview();
+                            break;
+                        case "0":
+                            inUserMenu = false;
+                            break;
+                        default:
+                            Console.WriteLine("Invalid choice. Please try again.");
+                            break;
+                    }
+                }
+
+                // Admin Menu:
+                static void AdminMenu()
+                {
+                    bool inAdminMenu = true;
+                    while (inAdminMenu)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("\nAdmin Menu");
+                        Console.WriteLine("1. Process Account Requests");
+                        Console.WriteLine("2. View Submitted Reviews");
+                        Console.WriteLine("3. View All Accounts");
+                        Console.WriteLine("4. View Pending Account Requests");
+                        Console.WriteLine("0. Return to Main Menu");
+                        Console.WriteLine("Select option: ");
+                        string adminChoice = Console.ReadLine();
+                        switch (adminChoice)
+                        {
+                            case "1":
+                                ProcessAccountRequests();
+                                break;
+                            case "2":
+                                ProcessReviews();
+                                break;
+                                case "3":
+                                ViewAllAccounts();
+                                break;
+                                case "4":
+                                ViewPendingAccountRequests();
+                                break;
+                            case "0":
+                                inAdminMenu = false;
+                                break;
+                            default:
+                                Console.WriteLine("Invalid choice. Please try again.");
+                                break;
+                        }
+                    }
+                }
+
+            }
         }
     }
 }
