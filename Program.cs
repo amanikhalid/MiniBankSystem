@@ -211,5 +211,34 @@
                 Console.WriteLine("Invalid input. Please enter a valid number.");
             }
         }
+
+        // Withdraw Money
+        static void WithdrawMoney()
+        {
+            int index = GetAccountIndex();
+            if (index == -1) return;
+            try
+            {
+                Console.WriteLine("Enter the amount to withdraw:");
+                double amount = Convert.ToDouble(Console.ReadLine());
+                if (amount <= 0)
+                {
+                    Console.WriteLine("Invalid amount. Please enter a positive number.");
+                    return;
+                }
+                if (accountBalances[index] - amount < MinimumBalance)
+                {
+                    Console.WriteLine($"Insufficient balance. Minimum balance of {MinimumBalance} required.");
+                    return;
+                }
+                accountBalances[index] -= amount;
+                Console.WriteLine("Withdrawal successful.");
+            }
+            catch
+            {
+                Console.WriteLine("Invalid input. Please enter a valid number.");
+            }
+        }
     }
+
 }
