@@ -159,6 +159,29 @@
                     Console.WriteLine("Your account request has been submitted successfully");
                 }
 
+                //Process Next Account Request
+                static void ProcessNextAccountRequest()
+                {
+                    if (createAccountRequests.Count == 0)
+                    {
+                        Console.WriteLine("No Pending account request");
+                        return;
+                    }
+                }
+
+                //var (name, nationalID) = createAccountRequests.Dequeue();
+                string accountRequest = createAccountRequests.Dequeue();
+                string[] parts = accountRequest.Split('|');
+                string name = parts[0];
+                string nationalID = parts[1];
+
+                int newAccountNumber = lastAccountNumber +1;
+
+                accountNumbers.Add(newAccountNumber);
+                accountNames.Add(name);
+                accountBalances.Add(MinimumBalance);
+                lastAccountNumber = newAccountNumber;
+                Console.WriteLine($"Account is successfully created for {name} with account number: {newAccountNumber}");
             }
         }
     }
