@@ -76,7 +76,7 @@
                     switch (userChoice)
                     {
                         case "1":
-                            CreateAccountRequest();
+                            CreateAccountRequests();
                             break;
                         case "2":
                             DepositMoney();
@@ -136,6 +136,27 @@
                                 break;
                         }
                     }
+
+                }
+
+                // Create Account Request
+                static void CreateAccountRequests()
+                {
+                    Console.WriteLine("Enter your Full Name:");
+                    string name = Console.ReadLine();
+
+                    Console.WriteLine("Enter your valid National ID");
+                    string nationalID = Console.ReadLine();
+
+                    string accountRequest = name + "|" + nationalID;
+                    
+                    Queue<string> queue = new Queue<string>();
+                    queue.Enqueue(accountRequest);
+
+                    //CreateAccountRequests.Enqueue((name, nationalID));
+                    createAccountRequests.Enqueue(accountRequest);
+
+                    Console.WriteLine("Your account request has been submitted successfully");
                 }
 
             }
