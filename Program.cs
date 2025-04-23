@@ -260,6 +260,122 @@
             Console.WriteLine("Your review has been submitted successfully.");
         }
 
+        // Process Next Account Request
+        static void ProcessAccountRequests()
+        {
+            if (createAccountRequests.Count == 0)
+            {
+                Console.WriteLine("No pending account requests.");
+                return;
+            }
+            ProcessNextAccountRequest();
+            SaveAccountsInformationToFile(); // Save account information after processing
+        }
+
+
+        // Process Reviews
+        static void ProcessReviews()
+        {
+            if (reviewStack.Count == 0)
+            {
+                Console.WriteLine("No reviews to process.");
+                return;
+            }
+            string review = reviewStack.Pop();
+            Console.WriteLine($"Processing review: {review}");
+            SaveReviewsToFile(); // Save reviews after processing
+        }
+        // View All Accounts
+        static void ViewAllAccounts()
+        {
+            Console.WriteLine("Account Number\tAccount Holder\tBalance");
+            for (int i = 0; i < accountNumbers.Count; i++)
+            {
+                Console.WriteLine($"{accountNumbers[i]}\t\t{accountNames[i]}\t\t{accountBalances[i]}");
+            }
+        }
+        // View Pending Account Requests
+        static void ViewPendingAccountRequests()
+        {
+            if (createAccountRequests.Count == 0)
+            {
+                Console.WriteLine("No pending account requests.");
+                return;
+            }
+            Console.WriteLine("Pending Account Requests:");
+            foreach (var request in createAccountRequests)
+            {
+                string[] parts = request.Split('|');
+                Console.WriteLine($"Name: {parts[0]}, National ID: {parts[1]}");
+            }
+        }
+        // Get Account Index
+        static int GetAccountIndex()
+        {
+            Console.WriteLine("Enter your account number:");
+            try
+            {
+                int accountNumber = Convert.ToInt32(Console.ReadLine());
+                int index = accountNumbers.IndexOf(accountNumber);
+                if (index == -1)
+                {
+                    Console.WriteLine("Account not found.");
+                    return -1;
+                }
+                return index;
+            }
+            catch
+            {
+                Console.WriteLine("Invalid input. Please enter a valid account number.");
+                return -1;
+            }
+        }
+        // Load Reviews
+        static void LoadReviews()
+        {
+            try // Load reviews from file
+            {
+                if (File.Exists(ReviewFilePath))
+                {
+                    using (StreamReader reader = new StreamReader(ReviewFilePath))
+                    {
+                        string line;
+                        while ((line = reader.ReadLine()) != null) // Read each line
+                        {
+                            reviewStack.Push(line);
+                        }
+                    }
+                }
+                Console.WriteLine("Reviews loaded successfully.");
+            }
+            catch (Exception ex) // Handle any exceptions
+            {
+                Console.WriteLine($"Error loading reviews: {ex.Message}");
+            }
+        }
+        // Save Reviews to File
+        static void SaveReviewsToFile()
+        {
+            try // Save reviews to file
+            {
+                using (StreamWriter writer = new StreamWriter(ReviewFilePath))
+                {
+                    foreach (var review in reviewStack) // Loop through all reviews
+                    {
+                        writer.WriteLine(review);
+                    }
+                }
+                Console.WriteLine("Reviews saved successfully.");
+            }
+            catch (Exception ex) // Handle any exceptions
+            {
+                Console.WriteLine($"Error saving reviews: {ex.Message}");
+            }
+        }
+
+
+
+
         static void SaveAccountsInformationToFile()
         {
             try // Save account information to file
@@ -282,4 +398,38 @@
 
 
         }
+        static void LoadAccountsInformationFromFile()
+        {
+            try // Load account information from file
+            {
+                if (File.Exists(AccountsFilePath))
+                {
+                    using (StreamReader reader = new StreamReader(AccountsFilePath))
+                    {
+                        string line;
+                        while ((line = reader.ReadLine()) != null) // Read each line
+                        {
+                            string[] parts = line.Split('|');
+                            int accountNumber = int.Parse(parts[0]);
+                            string name = parts[1];
+                            double balance = double.Parse(parts[2]);
+                            accountNumbers.Add(accountNumber);
+                            accountNames.Add(name);
+                            accountBalances.Add(balance);
+                            lastAccountNumber = Math.Max(lastAccountNumber, accountNumber); // Update last account number
+                        }
+                    }
+                }
+                Console.WriteLine("Accounts information loaded successfully.");
+            }
+            catch (Exception ex) // Handle any exceptions
+            {
+                Console.WriteLine($"Error loading accounts information: {ex.Message}");
+            }
+        }
+        
+        
+       
+
+
 }   } 
