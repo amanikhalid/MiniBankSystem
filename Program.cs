@@ -149,13 +149,13 @@
             Console.WriteLine("Enter your Full Name:");
             string name = Console.ReadLine();
 
-            Console.WriteLine("Enter your valid National ID");
+            Console.WriteLine("Enter your valid National ID"); 
             string nationalID = Console.ReadLine();
 
             string accountRequest = name + "|" + nationalID;
 
-            Queue<string> queue = new Queue<string>();
-            queue.Enqueue(accountRequest);
+            Queue<string> queue = new Queue<string>();// Create a new queue for each request
+            queue.Enqueue(accountRequest); 
 
             //CreateAccountRequests.Enqueue((name, nationalID));
             createAccountRequests.Enqueue(accountRequest);
@@ -190,23 +190,23 @@
         static void DepositMoney()
         {
             int index = GetAccountIndex();
-            if (index == -1) return;
-            try
+            if (index == -1) return; // Check if account exists
+            try // Check if input is valid
             {
-                Console.WriteLine("Enter the amount to deposit:");
+                Console.WriteLine("Enter the amount to deposit:"); 
                 double amount = Convert.ToDouble(Console.ReadLine());
 
-                if (amount <= 0)
+                if (amount <= 0) // Check if amount is positive
                 {
                     Console.WriteLine("Invalid amount. Please enter a positive number.");
                     return;
                 }
-
-                accountBalances[index] += amount;
+                
+                accountBalances[index] += amount; // Update balance
                 Console.WriteLine("Deposit successful.");
 
             }
-            catch
+            catch 
             {
                 Console.WriteLine("Invalid input. Please enter a valid number.");
             }
@@ -216,29 +216,42 @@
         static void WithdrawMoney()
         {
             int index = GetAccountIndex();
-            if (index == -1) return;
+            if (index == -1) return; // Check if account exists
             try
             {
                 Console.WriteLine("Enter the amount to withdraw:");
                 double amount = Convert.ToDouble(Console.ReadLine());
-                if (amount <= 0)
+                if (amount <= 0) // Check if amount is positive
+              
                 {
                     Console.WriteLine("Invalid amount. Please enter a positive number.");
                     return;
                 }
-                if (accountBalances[index] - amount < MinimumBalance)
+                if (accountBalances[index] - amount < MinimumBalance) // Check if withdrawal exceeds minimum balance
                 {
                     Console.WriteLine($"Insufficient balance. Minimum balance of {MinimumBalance} required.");
                     return;
                 }
-                accountBalances[index] -= amount;
+                accountBalances[index] -= amount; // Update balance
                 Console.WriteLine("Withdrawal successful.");
             }
-            catch
+            catch // Catch any exceptions
+           
             {
                 Console.WriteLine("Invalid input. Please enter a valid number.");
             }
         }
+        // View Balance
+        static void ViewBalance()
+        {
+            int index = GetAccountIndex();
+            if (index == -1) return; // Check if account exists
+            Console.WriteLine($"Account Number: {accountNumbers[index]}");
+            Console.WriteLine($"Account Holder: {accountNames[index]}");
+            Console.WriteLine($"Your current balance is: {accountBalances[index]}");
+        }
+
+
     }
 
 }
