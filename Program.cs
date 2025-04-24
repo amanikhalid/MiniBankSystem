@@ -312,63 +312,112 @@
                 Console.ReadKey();
             }
         }
-        
-  
-            // Deposit Money
-            static void DepositMoney()
+
+
+        // Deposit Money
+        static void DepositMoney()
+        {
+            Console.Clear();
+            Console.WriteLine("Deposit Money");
+            Console.WriteLine(" ");
+
+            int index = GetAccountIndex();
+            if (index == -1) // Check if account exists
+
             {
-                int index = GetAccountIndex();
-                if (index == -1) return; // Check if account exists
-                try // Check if input is valid
-                {
-                    Console.WriteLine("Enter the amount to deposit:");
-                    double amount = Convert.ToDouble(Console.ReadLine());
+                Console.WriteLine("Account not found");
+                Console.WriteLine("Press any key to continue");
+                Console.ReadKey();
+                return;
 
-                    if (amount <= 0) // Check if amount is positive
-                    {
-                        Console.WriteLine("Invalid amount. Please enter a positive number.");
-                        return;
-                    }
-
-                    accountBalances[index] += amount; // Update balance
-                    Console.WriteLine("Deposit successful.");
-
-                }
-                catch
-                {
-                    Console.WriteLine("Invalid input. Please enter a valid number.");
-                }
             }
+
+            try
+            {
+                Console.WriteLine("Enter the amount to deposit:");
+                string input = Console.ReadLine();
+
+                if (string.IsNullOrWhiteSpace(input)) // Check if input is empty
+                {
+                    Console.WriteLine("Deposit amount cannot be empty. Please try again.");
+                    return;
+                }
+
+                if (!double.TryParse(input, out double amount)) // Check if input is a number
+                {
+                    Console.WriteLine("Invalid amount. Please enter a valid number.");
+                    return;
+                }
+                if (amount <= 0) // Check if amount is positive
+                {
+                    Console.WriteLine("Invalid amount. Please enter a positive number.");
+                    return;
+                }
+                accountBalances[index] += amount; // Update balance
+                Console.WriteLine($"Deposit successful. New balance : {accountBalances[index]}");
+            }
+            catch (Exception e) { Console.WriteLine($"Error: {e.Message}"); }
+            {
+                Console.WriteLine("Press any key to continue");
+                Console.ReadKey();
+            }
+        }
+
 
             // Withdraw Money
             static void WithdrawMoney()
+        {
+            Console.Clear();
+            Console.WriteLine("Withdraw Money");
+            Console.WriteLine(" ");
+
+            int index = GetAccountIndex();
+            if (index == -1) // Check if account exists
             {
-                int index = GetAccountIndex();
-                if (index == -1) return; // Check if account exists
-                try
-                {
-                    Console.WriteLine("Enter the amount to withdraw:");
-                    double amount = Convert.ToDouble(Console.ReadLine());
-                    if (amount <= 0) // Check if amount is positive
-
-                    {
-                        Console.WriteLine("Invalid amount. Please enter a positive number.");
-                        return;
-                    }
-                    if (accountBalances[index] - amount < MinimumBalance) // Check if withdrawal exceeds minimum balance
-                    {
-                        Console.WriteLine($"Insufficient balance. Minimum balance of {MinimumBalance} required.");
-                        return;
-                    }
-                    accountBalances[index] -= amount; // Update balance
-                    Console.WriteLine("Withdrawal successful.");
-                }
-                catch // Catch any exceptions
-
-                {
-                    Console.WriteLine("Invalid input. Please enter a valid number.");
-                }
+                Console.WriteLine("Account not found");
+                Console.WriteLine("Press any key to continue");
+                Console.ReadKey();
+                return;
             }
+            try { Console.WriteLine("Enter the amount to withdraw:");
+                string input = Console.ReadLine();
+
+                if (string.IsNullOrWhiteSpace(input)) // Check if input is empty
+                {
+                    Console.WriteLine("Withdraw amount cannot be empty. Please try again.");
+                    return;
+                }
+
+                if (!double.TryParse(input, out double amount)) // Check if input is a number
+                {
+                    Console.WriteLine("Invalid amount. Please enter a valid number.");
+                    return;
+                }
+
+                if (amount <= 0) // Check if amount is positive
+                {
+                    Console.WriteLine("Invalid amount. Please enter a positive number.");
+                    return;
+                }
+
+                if (accountBalances[index] - amount < MinimumBalance) // Check if balance after withdrawal is above minimum
+                {
+                    Console.WriteLine($"Withdrawal denied. Minimum balance of {MinimumBalance} must be maintained.");
+                    return;
+                }
+
+                accountBalances[index] -= amount; // Update balance
+                Console.WriteLine($"Withdrawal successful. New balance: {accountBalances[index]}");
+            }
+
+            catch (Exception e)
+            { Console.WriteLine($"Error: {e.Message}"); }
+
+            {
+                Console.WriteLine("Press any key to continue");
+                Console.ReadKey();
+            }
+        }
             // View Balance
             static void ViewBalance()
             {
@@ -500,9 +549,6 @@
                     Console.WriteLine($"Error saving reviews: {ex.Message}");
                 }
             }
-
-
-
 
             static void SaveAccountsInformationToFile()
             {
