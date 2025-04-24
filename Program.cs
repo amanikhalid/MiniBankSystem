@@ -421,12 +421,34 @@
             // View Balance
             static void ViewBalance()
             {
-                int index = GetAccountIndex();
-                if (index == -1) return; // Check if account exists
-                Console.WriteLine($"Account Number: {accountNumbers[index]}"); // Display account number
-                Console.WriteLine($"Account Holder: {accountNames[index]}"); // Display account holder name
-                Console.WriteLine($"Your current balance is: {accountBalances[index]}");
+            Console.Clear();
+            Console.WriteLine("View Balance");
+            Console.WriteLine(" ");
+
+            int index = GetAccountIndex();
+            if (index == -1) // Check if account exists
+            {
+                Console.WriteLine("Account not found");
+                Console.WriteLine("Press any key to continue");
+                Console.ReadKey();
+                return;
             }
+            try
+            {
+                Console.WriteLine($"Account Number: {accountNumbers[index]}");
+                Console.WriteLine($"Account Holder: {accountNames[index]}");
+                Console.WriteLine($"Balance: {accountBalances[index]}");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error: {e.Message}"); 
+            }
+
+            {
+                Console.WriteLine("Press any key to continue");
+                Console.ReadKey();
+            }
+        }
 
             // Submit Review
             static void SubmitReview()
