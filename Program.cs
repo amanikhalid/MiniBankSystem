@@ -453,10 +453,33 @@
             // Submit Review
             static void SubmitReview()
             {
-                Console.WriteLine("Enter your review/complaint:");
-                string review = Console.ReadLine();
+            Console.Clear();
+            Console.WriteLine("Submit Review or Complaint");
+            Console.WriteLine(" ");
+
+            try
+            {
+                Console.WriteLine("Enter your review/complaint");
+                string review = Console.ReadLine().Trim();
+
+                if (string.IsNullOrWhiteSpace(review))
+                {
+                    Console.WriteLine("Review cannot be empty. Please try again");
+                    return;
+                }
                 reviewStack.Push(review);
-                Console.WriteLine("Your review has been submitted successfully.");
+                Console.WriteLine("Your review has been submitted successfully");
+
+            }
+
+            catch (Exception e)
+            { 
+                Console.WriteLine(e.ToString()); return;
+            }
+
+            Console.WriteLine("Press any key to continue");
+            Console.ReadKey();
+
             }
 
             // Process Next Account Request
