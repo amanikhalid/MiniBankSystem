@@ -25,8 +25,8 @@
             LoadAccountsInformationFromFile();
             LoadReviews();
 
-            bool running = true;
-            while (running)
+            bool running = true; // Main menu loop
+            while (running) 
             {
                 Console.Clear();
                 Console.WriteLine("\nWelcome to the SafeBank System");
@@ -59,9 +59,9 @@
         }
 
         // User Menu:
-        static void UserMenu()
+        static void UserMenu() 
         {
-            bool inUserMenu = true;
+            bool inUserMenu = true; // User menu loop
 
             while (inUserMenu)
             {
@@ -256,29 +256,64 @@
             }
         }
 
-            //Process Next Account Request
-            static void ProcessNextAccountRequest()
+        //Process Next Account Request
+        static void ProcessNextAccountRequest()
+        {
+            Console.Clear();
+            Console.WriteLine("Processing Next Account Request");
+            Console.WriteLine("");
+
+            try
             {
-                if (createAccountRequests.Count == 0)
+                if (createAccountRequests.Count == 0) // check if there are any requests
                 {
-                    Console.WriteLine("No Pending account request");
+                    Console.WriteLine("No pending account requests.");
                     return;
                 }
-                //var (name, nationalID) = createAccountRequests.Dequeue();
-                string accountRequest = createAccountRequests.Dequeue();
-                string[] parts = accountRequest.Split('|');
-                string name = parts[0];
-                string nationalID = parts[1];
+                else
+                {
+                    string accountRequest = createAccountRequests.Dequeue(); // get the next request
+                    string[] parts = accountRequest.Split('|'); // split the request into name and national ID
 
-                int newAccountNumber = lastAccountNumber +1;
+                    if (parts.Length != 2) // check if the request is valid
+                    {
+                        Console.WriteLine("Invalid account request format.");
+                        return;
+                    }
 
-                accountNumbers.Add(newAccountNumber);
-                accountNames.Add(name);
-                accountBalances.Add(MinimumBalance);
-                lastAccountNumber = newAccountNumber;
-                Console.WriteLine($"Account is successfully created for {name} with account number: {newAccountNumber}");
+                    string name = parts[0]; // get the name
+                    string nationalID = parts[1]; // get the national ID
+
+                    // validate name and ID
+                    if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(nationalID))
+                    {
+                        Console.WriteLine("Invalid account request. Name and National ID cannot be empty.");
+                        return;
+                    }
+
+                    int newAccountNumber = lastAccountNumber + 1; // generate new account number
+                    accountNumbers.Add(newAccountNumber); // add account number to list
+                    accountNames.Add(name); // add name to list
+                    accountBalances.Add(0.0); // add initial balance to list
+                    lastAccountNumber = newAccountNumber; // update last account number
+
+                    Console.WriteLine($"Account created successfully for {name} with Account Number: {newAccountNumber}");
+                    Console.WriteLine($"National ID: {nationalID}");
+                    Console.WriteLine($"Your initial balance is: {accountBalances[accountBalances.Count - 1]}");
+
+                }
+
             }
+            catch (Exception e)
+            { Console.WriteLine($"Error: {e.Message}"); }
 
+            {
+                Console.WriteLine("Press any key to continue");
+                Console.ReadKey();
+            }
+        }
+        
+  
             // Deposit Money
             static void DepositMoney()
             {
