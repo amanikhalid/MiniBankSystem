@@ -485,13 +485,78 @@
             // Process Next Account Request
             static void ProcessAccountRequests()
             {
-                if (createAccountRequests.Count == 0)
+            Console.Clear();
+            Console.WriteLine("Processing Account Requests");
+            Console.WriteLine(" ");
+
+            try
+            {
+                if (createAccountRequests.Count == 0) // Check if there are any requests
                 {
                     Console.WriteLine("No pending account requests.");
                     return;
                 }
-                ProcessNextAccountRequest();
-                SaveAccountsInformationToFile(); // Save account information after processing
+                else
+                {
+                    int approvedCount = 0;
+                    int rejectedCount = 0;
+
+                    while (createAccountRequests.Count > 0) // Process all requests
+                    {
+                        string accountRequest = createAccountRequests.Dequeue(); // Get the next request
+                        string[] parts = accountRequest.Split('|'); // Split the request into name and national ID
+                        if (parts.Length != 2) // Check if the request is valid
+                        {
+                            Console.WriteLine("Invalid account request format.");
+                            continue;
+                        }
+
+                        string name = parts[0]; // Get the name
+                        string nationalID = parts[1]; // Get the national ID
+
+                        Console.WriteLine($" Request:");
+                        Console.WriteLine($"Name: {name}");
+                        Console.WriteLine($"National ID: {nationalID}");
+                        Console.WriteLine("Approve or Reject this request? (Y/N): ");
+
+                        string choice = Console.ReadLine().Trim().ToUpper();
+
+                        if (choice == "Y")
+                        {
+                            int newAccountNumber = lastAccountNumber + 1; // Generate new account number
+                            accountNumbers.Add(newAccountNumber); // Add account number to list
+                            accountNames.Add(name); // Add name to list
+                            accountBalances.Add(0.0); // Add initial balance to list
+                            lastAccountNumber = newAccountNumber; // Update last account number
+                            Console.WriteLine($"Account created successfully for {name} with Account Number: {newAccountNumber}");
+                            approvedCount++;
+                        }
+                        else if (choice == "N")
+                        {
+                            Console.WriteLine($"Request for {name} has been rejected.");
+                            rejectedCount++;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid choice. Request not processed.");
+                        }
+
+                        Console.WriteLine(" ");
+                    }
+
+                    SaveAccountsInformationToFile(); // Save account information after processing requests
+                    Console.WriteLine($"Approved Requests: {approvedCount}");
+                    Console.WriteLine($"Rejected Requests: {rejectedCount}");
+                    Console.WriteLine("Account requests processed successfully.");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error: {e.Message}");
+            }
+            
+                Console.WriteLine("Press any key to continue");
+                Console.ReadKey();
             }
 
 
