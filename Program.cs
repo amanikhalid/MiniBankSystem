@@ -563,15 +563,63 @@
             // Process Reviews
             static void ProcessReviews()
             {
-                if (reviewStack.Count == 0)
+            Console.Clear();
+            Console.WriteLine("Process Submitted Reviews");
+            Console.WriteLine(" ");
+
+            try
+            {
+                if (reviewStack.Count == 0) // Check if there are any reviews
                 {
-                    Console.WriteLine("No reviews to process.");
+                    Console.WriteLine("No submitted reviews.");
                     return;
                 }
-                string review = reviewStack.Pop();
-                Console.WriteLine($"Processing review: {review}");
-                SaveReviewsToFile(); // Save reviews after processing
+                else
+                {
+                    int processdCount = 0; 
+                    int skippedCount = 0;
+
+                    while (reviewStack.Count > 0) 
+                    {
+                        string review = reviewStack.Pop(); 
+
+                        Console.WriteLine($" Review: {review}");
+                        Console.WriteLine("Mark this review as processed? (Y/N)");
+                        string choice = Console.ReadLine().Trim().ToUpper();
+                        if (choice == "Y") 
+                        {
+                            Console.WriteLine("Review marked as processed");
+                            processdCount++;
+                        }
+                        else if (choice == "N")
+                        {
+                            Console.WriteLine("Review skipped");
+                            skippedCount++;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid choice. Request not processed.");
+                        }
+
+                        Console.WriteLine();
+                    }
+                    SaveReviewsToFile();
+
+                    Console.WriteLine("Summary:");
+                    Console.WriteLine($"Processed:{processdCount} ");
+                    Console.WriteLine($"Skipped: {skippedCount}");
+                }
+                        
             }
+            catch (Exception e ) 
+            {
+                Console.WriteLine($"An error occurred while processing reviews: {e.Message}");
+
+            }
+            Console.WriteLine("\nPress any key to continue");
+            Console.ReadKey();
+        }
+
             // View All Accounts
             static void ViewAllAccounts()
             {
