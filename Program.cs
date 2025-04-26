@@ -753,29 +753,45 @@
 
         // Load Reviews
         static void LoadReviews()
+        {
+            Console.Clear();
+            Console.WriteLine("Load Reviews");
+            Console.WriteLine(" ");
+
+            try
             {
-                try // Load reviews from file
+                if (File.Exists(ReviewFilePath))
                 {
-                    if (File.Exists(ReviewFilePath))
+                    using (StreamReader reader = new StreamReader(ReviewFilePath))
                     {
-                        using (StreamReader reader = new StreamReader(ReviewFilePath))
+                        string line;
+                        while ((line = reader.ReadLine()) != null)
                         {
-                            string line;
-                            while ((line = reader.ReadLine()) != null) // Read each line
-                            {
-                                reviewStack.Push(line);
-                            }
+                            reviewStack.Push(line);
                         }
                     }
                     Console.WriteLine("Reviews loaded successfully.");
                 }
-                catch (Exception ex) // Handle any exceptions
+                else
                 {
-                    Console.WriteLine($"Error loading reviews: {ex.Message}");
+                    Console.WriteLine("Review file does not exist. No reviews to load.");
                 }
             }
-            // Save Reviews to File
-            static void SaveReviewsToFile()
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading reviews: {ex.Message}");
+            }
+            
+
+            {
+                Console.WriteLine(" ");
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+            }
+        }
+
+        // Save Reviews to File
+        static void SaveReviewsToFile()
             {
                 try // Save reviews to file
                 {
