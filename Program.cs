@@ -852,34 +852,50 @@
         }
 
         static void LoadAccountsInformationFromFile()
+        {
+            Console.Clear();
+            Console.WriteLine("Load Accounts Information from File");
+            Console.WriteLine(" ");
+
+            try
             {
-                try // Load account information from file
+                if (File.Exists(AccountsFilePath))
                 {
-                    if (File.Exists(AccountsFilePath))
+                    using (StreamReader reader = new StreamReader(AccountsFilePath))
                     {
-                        using (StreamReader reader = new StreamReader(AccountsFilePath))
+                        string line;
+                        while ((line = reader.ReadLine()) != null)
                         {
-                            string line;
-                            while ((line = reader.ReadLine()) != null) // Read each line
-                            {
-                                string[] parts = line.Split('|');
-                                int accountNumber = int.Parse(parts[0]);
-                                string name = parts[1];
-                                double balance = double.Parse(parts[2]);
-                                accountNumbers.Add(accountNumber);
-                                accountNames.Add(name);
-                                accountBalances.Add(balance);
-                                lastAccountNumber = Math.Max(lastAccountNumber, accountNumber); // Update last account number
-                            }
+                            string[] parts = line.Split('|');
+                            int accountNumber = int.Parse(parts[0]);
+                            string name = parts[1];
+                            double balance = double.Parse(parts[2]);
+
+                            accountNumbers.Add(accountNumber);
+                            accountNames.Add(name);
+                            accountBalances.Add(balance);
+
+                            lastAccountNumber = Math.Max(lastAccountNumber, accountNumber);
                         }
                     }
                     Console.WriteLine("Accounts information loaded successfully.");
                 }
-                catch (Exception ex) // Handle any exceptions
+                else
                 {
-                    Console.WriteLine($"Error loading accounts information: {ex.Message}");
+                    Console.WriteLine("Accounts file does not exist. No accounts to load.");
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading accounts information: {ex.Message}");
+            }
+            
+            {
+                Console.WriteLine(" ");
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+            }
+        }
 
 
 
