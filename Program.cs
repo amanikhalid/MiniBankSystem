@@ -658,21 +658,43 @@
 
         // View Pending Account Requests
         static void ViewPendingAccountRequests()
+        {
+            Console.Clear();
+            Console.WriteLine("View Pending Account Requests");
+            Console.WriteLine(" ");
+
+            try
             {
                 if (createAccountRequests.Count == 0)
                 {
                     Console.WriteLine("No pending account requests.");
-                    return;
                 }
-                Console.WriteLine("Pending Account Requests:");
-                foreach (var request in createAccountRequests)
+                else
                 {
-                    string[] parts = request.Split('|');
-                    Console.WriteLine($"Name: {parts[0]}, National ID: {parts[1]}");
+                    Console.WriteLine("Pending Account Requests:");
+                    Console.WriteLine(" ");
+
+                    foreach (var request in createAccountRequests)
+                    {
+                        string[] parts = request.Split('|');
+                        Console.WriteLine($"Name: {parts[0]}, National ID: {parts[1]}");
+                    }
                 }
             }
-            // Get Account Index
-            static int GetAccountIndex()
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            finally
+            {
+                Console.WriteLine(" ");
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+            }
+        }
+
+        // Get Account Index
+        static int GetAccountIndex()
             {
                 Console.WriteLine("Enter your account number:");
                 try
