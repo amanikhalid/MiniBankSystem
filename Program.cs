@@ -648,7 +648,7 @@
             {
                 Console.WriteLine($"Error: {ex.Message}");
             }
-            finally
+            
             {
                 Console.WriteLine(" ");
                 Console.WriteLine("Press any key to continue...");
@@ -685,7 +685,7 @@
             {
                 Console.WriteLine($"Error: {ex.Message}");
             }
-            finally
+            
             {
                 Console.WriteLine(" ");
                 Console.WriteLine("Press any key to continue...");
@@ -695,27 +695,64 @@
 
         // Get Account Index
         static int GetAccountIndex()
+        {
+            Console.Clear();
+            Console.WriteLine("Find Account by Account Number");
+            Console.WriteLine(" ");
+
+            bool validAccountNumber = false;
+            int accountNumber = 0;
+            int index = -1;
+
+            try
             {
-                Console.WriteLine("Enter your account number:");
-                try
+                while (!validAccountNumber)
                 {
-                    int accountNumber = Convert.ToInt32(Console.ReadLine());
-                    int index = accountNumbers.IndexOf(accountNumber);
-                    if (index == -1)
+                    Console.WriteLine("Enter your account number:");
+                    string input = Console.ReadLine();
+
+                    if (string.IsNullOrWhiteSpace(input))
                     {
-                        Console.WriteLine("Account not found.");
-                        return -1;
+                        Console.WriteLine("Account number cannot be empty. Please try again.");
+                        validAccountNumber = false;
                     }
-                    return index;
-                }
-                catch
-                {
-                    Console.WriteLine("Invalid input. Please enter a valid account number.");
-                    return -1;
+                    else if (!int.TryParse(input, out accountNumber))
+                    {
+                        Console.WriteLine("Invalid format. Please enter numbers only.");
+                        validAccountNumber = false;
+                    }
+                    else
+                    {
+                        index = accountNumbers.IndexOf(accountNumber);
+                        if (index == -1)
+                        {
+                            Console.WriteLine("Account not found. Please try again.");
+                            validAccountNumber = false;
+                        }
+                        else
+                        {
+                            validAccountNumber = true;
+                        }
+                    }
                 }
             }
-            // Load Reviews
-            static void LoadReviews()
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            
+
+            {
+                Console.WriteLine(" ");
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+            }
+
+            return index;
+        }
+
+        // Load Reviews
+        static void LoadReviews()
             {
                 try // Load reviews from file
                 {
