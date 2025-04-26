@@ -822,28 +822,36 @@
 
 
         static void SaveAccountsInformationToFile()
+        {
+            Console.Clear();
+            Console.WriteLine("Save Accounts Information to File");
+            Console.WriteLine(" ");
+
+            try
             {
-                try // Save account information to file
+                using (StreamWriter writer = new StreamWriter(AccountsFilePath))
                 {
-                    using (StreamWriter writer = new StreamWriter(AccountsFilePath))
+                    for (int i = 0; i < accountNumbers.Count; i++)
                     {
-                        for (int i = 0; i < accountNumbers.Count; i++) // Loop through all accounts
-                        {
-                            string dataLine = $"{accountNumbers[i]}|{accountNames[i]}|{accountBalances[i]}";
-                            writer.WriteLine(dataLine);
-                        }
+                        string dataLine = $"{accountNumbers[i]}|{accountNames[i]}|{accountBalances[i]}";
+                        writer.WriteLine(dataLine);
                     }
-                    Console.WriteLine("Accounts information saved successfully.");
-
                 }
-                catch (Exception ex) // Handle any exceptions
-                {
-                    Console.WriteLine($"Error saving accounts information: {ex.Message}");
-                }
-
-
+                Console.WriteLine("Accounts information saved successfully.");
             }
-            static void LoadAccountsInformationFromFile()
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving accounts information: {ex.Message}");
+            }
+            
+            {
+                Console.WriteLine(" ");
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+            }
+        }
+
+        static void LoadAccountsInformationFromFile()
             {
                 try // Load account information from file
                 {
