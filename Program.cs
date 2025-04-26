@@ -620,17 +620,44 @@
             Console.ReadKey();
         }
 
-            // View All Accounts
-            static void ViewAllAccounts()
+        // View All Accounts
+        static void ViewAllAccounts()
+        {
+            Console.Clear();
+            Console.WriteLine("All Bank Accounts");
+            Console.WriteLine(" ");
+
+            try
             {
-                Console.WriteLine("Account Number\tAccount Holder\tBalance");
-                for (int i = 0; i < accountNumbers.Count; i++)
+                if (accountNumbers.Count == 0)
                 {
-                    Console.WriteLine($"{accountNumbers[i]}\t\t{accountNames[i]}\t\t{accountBalances[i]}");
+                    Console.WriteLine("No accounts available to display.");
+                }
+                else
+                {
+                    Console.WriteLine("Account Number\tAccount Holder\tBalance");
+                    Console.WriteLine("  ");
+
+                    for (int i = 0; i < accountNumbers.Count; i++)
+                    {
+                        Console.WriteLine($"{accountNumbers[i]}\t\t{accountNames[i]}\t\t{accountBalances[i]}");
+                    }
                 }
             }
-            // View Pending Account Requests
-            static void ViewPendingAccountRequests()
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            finally
+            {
+                Console.WriteLine(" ");
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+            }
+        }
+
+        // View Pending Account Requests
+        static void ViewPendingAccountRequests()
             {
                 if (createAccountRequests.Count == 0)
                 {
