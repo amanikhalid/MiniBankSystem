@@ -792,25 +792,36 @@
 
         // Save Reviews to File
         static void SaveReviewsToFile()
-            {
-                try // Save reviews to file
-                {
-                    using (StreamWriter writer = new StreamWriter(ReviewFilePath))
-                    {
-                        foreach (var review in reviewStack) // Loop through all reviews
-                        {
-                            writer.WriteLine(review);
-                        }
-                    }
-                    Console.WriteLine("Reviews saved successfully.");
-                }
-                catch (Exception ex) // Handle any exceptions
-                {
-                    Console.WriteLine($"Error saving reviews: {ex.Message}");
-                }
-            }
+        {
+            Console.Clear();
+            Console.WriteLine("Save Reviews to File");
+            Console.WriteLine(" ");
 
-            static void SaveAccountsInformationToFile()
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(ReviewFilePath))
+                {
+                    foreach (var review in reviewStack)
+                    {
+                        writer.WriteLine(review);
+                    }
+                }
+                Console.WriteLine("Reviews saved successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving reviews: {ex.Message}");
+            }
+            
+            {
+                Console.WriteLine(" ");
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+            }
+        }
+
+
+        static void SaveAccountsInformationToFile()
             {
                 try // Save account information to file
                 {
