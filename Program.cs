@@ -4,8 +4,8 @@
     {
         // constants
         const double MinimumBalance = 100.0;
-        const string AccountsFilePath = @"C:\Users\RashedAlGhailani\source\repos\MiniBankSystem\accounts.txt";
-        const string ReviewFilePath = @"C:\Users\RashedAlGhailani\source\repos\MiniBankSystem\reviews.txt";
+        const string AccountsFilePath = @"C:\Users\CodeLine\source\repos\MiniBankSystem\accounts.txt";
+        const string ReviewFilePath = @"C:\Users\CodeLine\source\repos\MiniBankSystem\reviews.txt";
 
         //Global lists (parallel)
         static List<int> accountNumbers = new List<int>();
