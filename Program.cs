@@ -26,7 +26,7 @@
             LoadAccountsInformationFromFile();
             LoadReviews();
 
-            string loggedInNationalID = Login(); // Call Login before menu
+            
 
             bool running = true; // Main menu loop
             while (running)
@@ -94,7 +94,36 @@
         // User Menu:
         static void UserMenu() 
         {
-            bool inUserMenu = true; // User menu loop
+            bool inUserMenu = true;
+            string loggedInNationalID = "";
+
+            Console.Clear();
+            Console.WriteLine("1. Login");
+            Console.WriteLine("2. Create Account Request (without login)");
+            Console.WriteLine("0. Back to Main Menu");
+            Console.Write("Select option: ");
+            string choice = Console.ReadLine();
+
+            if (choice == "1")
+            {
+                loggedInNationalID = Login();
+            }
+            else if (choice == "2")
+            {
+                CreateAccountRequests();
+                return;
+            }
+            else if (choice == "0")
+            {
+                return;
+            }
+            else
+            {
+                Console.WriteLine("Invalid choice.");
+                Console.ReadKey();
+                return;
+            }
+           
 
             while (inUserMenu)
             {
@@ -157,12 +186,15 @@
                         ProcessAccountRequests();
                         break;
                     case "2":
-                        ProcessReviews();
+                        ProcessNextAccountRequest();
                         break;
                     case "3":
-                        ViewAllAccounts();
+                        ProcessReviews();
                         break;
                     case "4":
+                        ViewAllAccounts();
+                        break;
+                    case "5":
                         ViewPendingAccountRequests();
                         break;
                     case "0":
