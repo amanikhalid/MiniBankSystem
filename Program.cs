@@ -8,11 +8,11 @@
         const string ReviewFilePath = @"C:\Users\CodeLine\source\repos\MiniBankSystem\reviews.txt";
 
         //Global lists (parallel)
-        static List<int> accountNumbers = new List<int>();
+        static List<int> accountNumber = new List<int>();
         static List<string> accountNames = new List<string>();
         static List<double> accountBalances = new List<double>();
         static List<string> accountNationalIDs = new List<string>();
-
+        static List<int> accountNumbers = new List<int>();
         //static List<Queue<string>> transactions = new List<Queue<string>>();
         // Queues and Stacks
         //static Queue<(string name, string nationalID)> createAccountRequests = new Queue<(string name, string nationalID)>();
@@ -312,24 +312,30 @@
                         }
 
                         // After all validations passed
-                        string accountRequest = $"{name}|{nationalID}";
+                        string accountRequest = $"{name}|{nationalID}|{initialBalance}";
                         createAccountRequests.Enqueue(accountRequest);
 
                         // Save to file
-                        File.AppendAllText(AccountsFilePath, $"{name}|{nationalID}|{initialBalance}\n");
+                        //File.AppendAllText(AccountsFilePath, $"{name}|{nationalID}|{initialBalance}\n");
+
+
 
                         Console.WriteLine($"Account request for {name} with National ID {nationalID} has been submitted successfully.");
-                    }
+                Console.WriteLine();
+
+            }
                     catch (Exception ex)
                     {
                         Console.WriteLine($"Error: {ex.Message}");
                     }
-                    finally
+                    
                     {
                         Console.WriteLine("Press any key to continue...");
                         Console.ReadKey();
                     }
                 }
+
+       
 
 
                 //Process Next Account Request
@@ -351,7 +357,7 @@
                             string accountRequest = createAccountRequests.Dequeue(); // get the next request
                             string[] parts = accountRequest.Split('|'); // split the request into name and national ID
 
-                            if (parts.Length != 2) // check if the request is valid
+                            if (parts.Length != 3) // check if the request is valid
                             {
                                 Console.WriteLine("Invalid account request format.");
                                 return;
@@ -359,7 +365,7 @@
 
                             string name = parts[0]; // get the name
                             string nationalID = parts[1]; // get the national ID
-
+                              double balance = double.Parse(parts[2]);
                             // validate name and ID
                             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(nationalID))
                             {
@@ -370,10 +376,12 @@
                             int newAccountNumber = lastAccountNumber + 1; // generate new account number
                             accountNumbers.Add(newAccountNumber); // add account number to list
                             accountNames.Add(name); // add name to list
-                            accountBalances.Add(0.0); // add initial balance to list
-                            lastAccountNumber = newAccountNumber; // update last account number
-
-                            Console.WriteLine($"Account created successfully for {name} with Account Number: {newAccountNumber}");
+                            accountNationalIDs.Add(nationalID);
+                            accountBalances.Add(balance); // add initial balance to list
+                    accountNumbers.Add(newAccountNumber); // add account number to list
+                    lastAccountNumber = newAccountNumber; // update last account number
+                    
+                    Console.WriteLine($"Account created successfully for {name} with Account Number: {newAccountNumber}");
                             Console.WriteLine($"National ID: {nationalID}");
                             Console.WriteLine($"Your initial balance is: {accountBalances[accountBalances.Count - 1]}");
 
@@ -887,7 +895,7 @@
                     {
                         for (int i = 0; i < accountNumbers.Count; i++)
                         {
-                            string dataLine = $"{accountNumbers[i]}|{accountNames[i]}|{accountBalances[i]}";
+                            string dataLine = $"{accountNumbers[i]}|{accountNationalIDs[i]}|{accountBalances[i]}";
                             writer.WriteLine(dataLine);
                         }
                     }
@@ -921,11 +929,11 @@
                             while ((line = reader.ReadLine()) != null)
                             {
                                 string[] parts = line.Split('|');
-                                string name = parts[0];
+                                string number = parts[0];
                                 string nationalID = parts[1];
                                 double balance = double.Parse(parts[2]);
 
-                                accountNames.Add(name);
+                                accountNumbers.Add(int.Parse(number));
                                 accountNationalIDs.Add(nationalID);
                                 accountBalances.Add(balance);
                             }
@@ -948,8 +956,19 @@
                     Console.ReadKey();
                 }
             }
+        static void generateNumber()
+        {
+            Random randomNumber = new Random();
+            lastAccountNumber = randomNumber.Next(1, 9000); // Generate a random account number
+            while (accountNumbers.Contains(lastAccountNumber)) // Ensure the number is unique
+            {
+                lastAccountNumber = randomNumber.Next(1, 9000);
+            }
+            accountNumbers.Add(lastAccountNumber); // Add the new account number to the list
 
         }
+
+    }
     }
 
 
