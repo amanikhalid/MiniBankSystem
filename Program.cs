@@ -11,6 +11,7 @@
         static List<int> accountNumbers = new List<int>();
         static List<string> accountNames = new List<string>();
         static List<double> accountBalances = new List<double>();
+        static List<string> accountNationalIDs = new List<string>();
 
         //static List<Queue<string>> transactions = new List<Queue<string>>();
         // Queues and Stacks
@@ -25,15 +26,17 @@
             LoadAccountsInformationFromFile();
             LoadReviews();
 
+            string loggedInNationalID = Login(); // Call Login before menu
+
             bool running = true; // Main menu loop
-            while (running) 
+            while (running)
             {
                 Console.Clear();
                 Console.WriteLine("\nWelcome to the SafeBank System");
                 Console.WriteLine("1. User Menu");
                 Console.WriteLine("2. Admin Menu");
                 Console.WriteLine("0. Exit");
-                Console.WriteLine("Select option: ");
+                Console.Write("Select option: ");
 
                 string mainChoice = Console.ReadLine();
 
@@ -50,13 +53,43 @@
                         break;
                     default:
                         Console.WriteLine("Invalid choice. Please try again.");
+                        Console.ReadKey();
                         break;
                 }
             }
 
             Console.WriteLine("Thank you for using the SafeBank System. Goodbye!");
-
         }
+
+        static string Login()
+        {
+            Console.Clear();
+            Console.WriteLine("Login System");
+            Console.WriteLine(" ");
+
+            while (true)
+            {
+                Console.WriteLine("Enter your National ID:");
+                string nationalID = Console.ReadLine();
+
+                if (string.IsNullOrWhiteSpace(nationalID))
+                {
+                    Console.WriteLine("National ID cannot be empty. Please try again.");
+                }
+                else if (accountNationalIDs.Contains(nationalID)) // Make sure your list is called accountNationalIDs
+                {
+                    Console.WriteLine("Login successful!");
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
+                    return nationalID;
+                }
+                else
+                {
+                    Console.WriteLine("National ID not found. Please try again.");
+                }
+            }
+        }
+
 
         // User Menu:
         static void UserMenu() 
@@ -234,6 +267,20 @@
                             validinitialBalance = true;
                         }
                     }
+
+                    // Check if National ID already exists in active accounts
+                    if (accountNationalIDs.Contains(nationalID))
+                    {
+                        Console.WriteLine("An account with this National ID already exists.");
+                        validNationalID = false;
+                    }
+                    // Check if National ID already exists in pending requests
+                    else if (createAccountRequests.Any(r => r.Split('|')[1] == nationalID))
+                    {
+                        Console.WriteLine("An account request with this National ID is already pending.");
+                        validNationalID = false;
+                    }
+
                     string accountRequest = $"{name}|{nationalID}"; // format: "Name|NationalID"
                     createAccountRequests.Enqueue(accountRequest); // add request to queue
                     Console.WriteLine($"Account request for {name} with National ID {nationalID} has been submitted successfully.");
@@ -249,7 +296,7 @@
             {
                 Console.WriteLine($"Error: {ex.Message}");
             }
-            finally
+            
             {
                 Console.WriteLine("Press any key to continue");
                 Console.ReadKey();
