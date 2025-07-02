@@ -861,6 +861,48 @@ namespace MiniBankSystem
 
         }
 
+        static int Login()
+        {
+            Console.Clear();
+            Console.WriteLine("Login System");
+            Console.WriteLine(" ");
+            while (true)
+            {
+                Console.Write("Enter your National ID: ");
+                string nationalID = Console.ReadLine().Trim();
+                if (string.IsNullOrWhiteSpace(nationalID))
+                {
+                    Console.WriteLine("National ID cannot be empty. Please try again.");
+                    continue;
+                }
+                int index = accountNationalIDs.IndexOf(nationalID);
+                if (index == -1)
+                {
+                    Console.WriteLine("National ID not found. Please try again.");
+                    continue;
+                }
+                Console.Write("Enter your password: ");
+                string password = ReadPassword();
+                string hashedPassword = HashPassword(password);
+                if (hashedPassword != passwordHashes[index])
+                {
+                    failedLoginAttempts[index]++;
+                    if (failedLoginAttempts[index] >= 3)
+                    {
+                        isLocked[index] = true;
+                        Console.WriteLine("Account is locked due to too many failed login attempts.");
+                        return -1; // Account is locked
+                    }
+                    Console.WriteLine("Invalid password. Please try again.");
+                    continue;
+                }
+                // Reset failed attempts on successful login
+                failedLoginAttempts[index] = 0;
+                Console.WriteLine($"Login successful! Welcome, {accountNames[index]}.");
+                return index; // Return the index of the logged-in account
+            }
+        }
+
 
         // Deposit Money
         static void DepositMoney(string nationalID)
