@@ -21,14 +21,30 @@ namespace MiniBankSystem
         static List<int> accountNumber = new List<int>();
         static List<string> accountNames = new List<string>();
         static List<double> accountBalances = new List<double>();
-        static List<string> accountNationalIDs = new List<string>();
-        static List<int> accountNumbers = new List<int>();
+        
         //static List<Queue<string>> transactions = new List<Queue<string>>();
         // Queues and Stacks
         //static Queue<(string name, string nationalID)> createAccountRequests = new Queue<(string name, string nationalID)>();
         static Queue<string> createAccountRequests = new Queue<string>(); //format: "Name|NationalID"
         static Stack<string> reviewStack = new Stack<string>();
 
+        static List<string> passwordHashes = new List<string>(); // List to store hashed passwords
+        static List<string> nationalIDs = new List<string>(); // List to store National IDs
+
+        static string HashPassword(string password) // Method to hash passwords using SHA256
+        {
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
+                StringBuilder builder = new StringBuilder();
+                foreach (byte b in bytes)
+                {
+                    builder.Append(b.ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
+        
         // Account number generator
         static int lastAccountNumber;
         static void Main()
