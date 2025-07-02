@@ -1,4 +1,11 @@
-﻿namespace MiniBankSystem
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+
+namespace MiniBankSystem
 {
     internal class Program
     {
@@ -103,6 +110,20 @@
                 {
                     Console.WriteLine("National ID not found. Please try again.");
                 }
+
+                Console.Write("Enter password: ");
+                string passwordInput = ReadPasswordWithMask();
+                string hashedInput = HashPassword(passwordInput);
+
+                if (accountPasswords[index] == hashedInput)
+                {
+                    // Success
+                }
+                else
+                {
+                    // Track failed attempts and possibly lock the account
+                }
+
             }
         }
 
