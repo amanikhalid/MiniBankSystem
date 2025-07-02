@@ -324,6 +324,10 @@ namespace MiniBankSystem
                     case "5":
                         ProcessLoanRequests();
                         break;
+                    case "6":
+                        ViewAverageUserFeedback();
+                        break;
+
 
                     case "0":
                         inAdminMenu = false;
