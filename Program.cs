@@ -250,6 +250,9 @@ namespace MiniBankSystem
                     case "5":
                         SubmitReview();
                         break;
+                    case "6":
+                        GenerateMonthlyStatement();
+                        break;
                     case "0":
                         inUserMenu = false;
                         break;
