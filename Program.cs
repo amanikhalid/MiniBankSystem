@@ -68,6 +68,7 @@ namespace MiniBankSystem
         }
 
         static List<string>> transactions = new List<string>>(); // List to store transaction history
+        static List<string> phoneNumbers = new List<string>(); // List to store phone numbers
         // Account number generator
         static int lastAccountNumber;
         static void Main()
