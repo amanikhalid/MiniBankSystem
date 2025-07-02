@@ -495,6 +495,32 @@ namespace MiniBankSystem
                 Console.ReadKey();
             }
         }
+        static void ViewAppointments()
+        {
+            Console.Clear();
+            Console.WriteLine("View Appointments");
+            Console.WriteLine(" ");
+            try
+            {
+                if (appointmentRequests.Count == 0)
+                {
+                    Console.WriteLine("No appointments found.");
+                    return;
+                }
+                foreach (var appointment in appointmentRequests)
+                {
+                    Console.WriteLine($"Account Index: {appointment.accountIndex}, Date: {appointment.appointmentDate}, Reason: {appointment.appointmentReason}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            {
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+            }
+        }
 
 
 
