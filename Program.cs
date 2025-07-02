@@ -44,7 +44,29 @@ namespace MiniBankSystem
                 return builder.ToString();
             }
         }
-        
+
+        static string ReadPassword()
+        {
+            StringBuilder password = new StringBuilder();
+            ConsoleKeyInfo keyInfo;
+            do
+            {
+                keyInfo = Console.ReadKey(intercept: true);
+                if (keyInfo.Key != ConsoleKey.Enter && keyInfo.Key != ConsoleKey.Backspace)
+                {
+                    password.Append(keyInfo.KeyChar);
+                    Console.Write("*"); // Display asterisk for each character
+                }
+                else if (keyInfo.Key == ConsoleKey.Backspace && password.Length > 0)
+                {
+                    password.Remove(password.Length - 1, 1);
+                    Console.Write("\b \b"); // Remove the last asterisk
+                }
+            } while (keyInfo.Key != ConsoleKey.Enter);
+            Console.WriteLine();
+            return password.ToString();
+        }
+
         // Account number generator
         static int lastAccountNumber;
         static void Main()
