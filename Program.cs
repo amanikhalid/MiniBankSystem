@@ -262,6 +262,15 @@ namespace MiniBankSystem
                     case "9":
                         ViewTransactions(); // Pass NationalID
                         break;
+                    case "10":
+                        ViewTransactionHistory();
+                        break;
+                    case "11":
+                        BookAppointment(); // Pass NationalID
+                        break;
+                    case "12":
+                        LINQTools(); // Pass NationalID
+                        break;
 
                     case "0":
                         inUserMenu = false;
