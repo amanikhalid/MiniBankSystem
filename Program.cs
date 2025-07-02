@@ -369,6 +369,36 @@ namespace MiniBankSystem
             return true;
         }
 
+        static void LINQTools()
+        {
+            Console.Clear();
+            Console.WriteLine("LINQ Tools");
+            Console.WriteLine("1. Search Accounts by Name");
+            Console.WriteLine("2. Sort Accounts by Balance");
+            Console.WriteLine("3. Filter Accounts with Balance Above Minimum");
+            Console.WriteLine("0. Return to User Menu");
+            Console.Write("Select option: ");
+            string choice = Console.ReadLine();
+            switch (choice)
+            {
+                case "1":
+                    SearchAccountsByName();
+                    break;
+                case "2":
+                    SortAccountsByBalance();
+                    break;
+                case "3":
+                    FilterAccountsAboveMinimumBalance();
+                    break;
+                case "0":
+                    return;
+                default:
+                    Console.WriteLine("Invalid choice. Please try again.");
+                    break;
+            }
+        }
+
+
 
         // Create Account Request
         static void CreateAccountRequests()
