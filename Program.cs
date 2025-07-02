@@ -21,7 +21,7 @@ namespace MiniBankSystem
         static List<int> accountNumber = new List<int>();
         static List<string> accountNames = new List<string>();
         static List<double> accountBalances = new List<double>();
-        
+
         //static List<Queue<string>> transactions = new List<Queue<string>>();
         // Queues and Stacks
         //static Queue<(string name, string nationalID)> createAccountRequests = new Queue<(string name, string nationalID)>();
@@ -74,11 +74,15 @@ namespace MiniBankSystem
         static List<double> loanAmounts = new List<double>(); // List to store loan amounts
         static List<double> loanInterestRate = new List<double>(); // List to store loan interest rates
         static List<int> feedbackRatings = new List<int>(); // List to store feedback ratings
+
         static Queue<int accountIndex, double amount, double interestRate> loanRequests = new Queue<int, double, double>(); // Queue to store loan requests
         static Queue<(int accountIndex, DateTime appointmentDate, string appointmentReason)> appointmentRequests = new Queue<(int, DateTime, string)>(); // Queue to store appointment requests
         static List<bool> hasAppointment = new List<bool>(); // List to track if the account has an appointment
-        static List <int> failedLoginAttempts = new List<int>(); // List to track failed login attempts 
+        static List<int> failedLoginAttempts = new List<int>(); // List to track failed login attempts 
         static List<bool> isLocked = new List<bool>(); // List to track if the account is locked
+        static List<string> accountNationalIDs = new List<string>(); // List to store National IDs for accounts
+        static List<int> accountNumbers = new List<int>(); // List to store account numbers
+
 
         // Account number generator
         static int lastAccountNumber;
@@ -107,19 +111,27 @@ namespace MiniBankSystem
                     case "2":
                         AdminMenu();
                         break;
+
                     case "0":
+                        SaveAccountsInformationToFile();
+                        SaveReviews();
+
+                        Console.Write("Do you want to create a backup before exit? (Y/N): ");
+                        string backupChoice = Console.ReadLine().Trim().ToUpper();
+                        if (backupChoice == "Y")
+                            BackupAccountsInformationToFile();
+
                         running = false;
                         break;
-                    default:
-                        Console.WriteLine("Invalid choice. Please try again.");
-                        Console.ReadKey();
-                        break;
+                    default: Console.WriteLine("Invalid choice. Please try again"); break;
                 }
             }
 
             Console.WriteLine("Thank you for using the SafeBank System. Goodbye!");
+            Console.ReadKey();
         }
-
+    
+         
         // ------------------------------------------------------------------
 
         static string Login()
@@ -208,6 +220,15 @@ namespace MiniBankSystem
                 Console.WriteLine("3. Withdraw Money");
                 Console.WriteLine("4. Check/View Balance");
                 Console.WriteLine("5. Submit Review/Complaint");
+                // Adding the new Features
+                Console.WriteLine("6. Generate Monthly Statement"); 
+                Console.WriteLine("7. Update My Contact Info");
+                Console.WriteLine("8. Request a Loan");
+                Console.WriteLine("9. View Transaction History"); 
+                Console.WriteLine("10. View Transaction History");
+                Console.WriteLine("11. Book Appointment");
+                Console.WriteLine("12. LINQ Tools (Search/Sort)");
+
                 Console.WriteLine("0. Return to Main Menu");
                 Console.WriteLine("Select option: ");
                 string userChoice = Console.ReadLine();
