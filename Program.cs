@@ -438,6 +438,29 @@ namespace MiniBankSystem
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
         }
+        static void FilterAccountsAboveMinimumBalance()
+        {
+            Console.Clear();
+            Console.WriteLine("Filter Accounts with Balance Above Minimum");
+            var filteredAccounts = accountBalances
+                .Select((balance, index) => new { Balance = balance, Index = index })
+                .Where(x => x.Balance > MinimumBalance)
+                .ToList();
+            if (filteredAccounts.Count > 0)
+            {
+                Console.WriteLine($"Accounts with balance above {MinimumBalance}:");
+                foreach (var account in filteredAccounts)
+                {
+                    Console.WriteLine($"Account Number: {accountNumbers[account.Index]}, Name: {accountNames[account.Index]}, Balance: {account.Balance}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No accounts found with balance above the minimum.");
+            }
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+        }
 
 
 
