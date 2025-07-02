@@ -626,6 +626,33 @@ namespace MiniBankSystem
             }
         }
 
+        static void ViewTransactionHistory()
+        {
+            Console.Clear();
+            Console.WriteLine("View Transaction History");
+            Console.WriteLine(" ");
+            try
+            {
+                if (transactions.Count == 0)
+                {
+                    Console.WriteLine("No transactions found.");
+                    return;
+                }
+                foreach (var transaction in transactions)
+                {
+                    Console.WriteLine(transaction);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            {
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+            }
+        }
+
 
 
         // Create Account Request
