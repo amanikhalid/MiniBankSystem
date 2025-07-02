@@ -76,6 +76,7 @@ namespace MiniBankSystem
         static List<int> feedbackRatings = new List<int>(); // List to store feedback ratings
         static Queue<int accountIndex, double amount, double interestRate> loanRequests = new Queue<int, double, double>(); // Queue to store loan requests
         static Queue<(int accountIndex, DateTime appointmentDate, string appointmentReason)> appointmentRequests = new Queue<(int, DateTime, string)>(); // Queue to store appointment requests
+        static List<bool> hasAppointment = new List<bool>(); // List to track if the account has an appointment
         // Account number generator
         static int lastAccountNumber;
         static void Main()
