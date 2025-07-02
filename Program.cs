@@ -71,6 +71,8 @@ namespace MiniBankSystem
         static List<string> phoneNumbers = new List<string>(); // List to store phone numbers
         static List<string> addresses = new List<string>(); // List to store addresses 
         static List<bool> hasActiveLoan = new List<bool>(); // List to track if the account has an active loan
+        static List<double> loanAmounts = new List<double>(); // List to store loan amounts
+
         // Account number generator
         static int lastAccountNumber;
         static void Main()
