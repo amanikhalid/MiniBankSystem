@@ -11,8 +11,14 @@ namespace MiniBankSystem
     {
         // constants
         const double MinimumBalance = 100.0;
+        const double USD_TO_OMR = 3.8;
+        const double EUR_TO_OMR = 4.1;
         const string AccountsFilePath = @"C:\Users\CodeLine\source\repos\MiniBankSystem\accounts.txt";
         const string ReviewFilePath = @"C:\Users\CodeLine\source\repos\MiniBankSystem\reviews.txt";
+        const string TransactionsFilePath = "transactions.txt";
+        const string AdminID = "admin";
+        const string AdminPassword = "Bank1122";
+
 
         //Global lists (parallel)
         static List<int> accountNumber = new List<int>();
