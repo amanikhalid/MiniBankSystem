@@ -422,6 +422,22 @@ namespace MiniBankSystem
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
         }
+        static void SortAccountsByBalance()
+        {
+            Console.Clear();
+            Console.WriteLine("Sort Accounts by Balance");
+            var sortedAccounts = accountBalances
+                .Select((balance, index) => new { Balance = balance, Index = index })
+                .OrderByDescending(x => x.Balance)
+                .ToList();
+            Console.WriteLine("Accounts sorted by balance (highest to lowest):");
+            foreach (var account in sortedAccounts)
+            {
+                Console.WriteLine($"Account Number: {accountNumbers[account.Index]}, Name: {accountNames[account.Index]}, Balance: {account.Balance}");
+            }
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+        }
 
 
 
