@@ -12,6 +12,8 @@
         static List<string> accountNames = new List<string>();
         static List<double> accountBalances = new List<double>();
         static List<string> accountNationalIDs = new List<string>();
+        static List<string> accountPasswords = new List<string>(); // New feature for passwords
+        static List<bool> accountIsLocked = new List<bool>();      // New feature for account lock status
         static List<int> accountNumbers = new List<int>();
         //static List<Queue<string>> transactions = new List<Queue<string>>();
         // Queues and Stacks
