@@ -346,6 +346,28 @@ namespace MiniBankSystem
                 }
             }
         }
+        static bool AdminLogin()
+        {
+            Console.Clear();
+            Console.WriteLine("Admin Login");
+            Console.WriteLine(" ");
+            Console.Write("Enter Admin ID: ");
+            string adminID = Console.ReadLine().Trim();
+            if (adminID != AdminID)
+            {
+                Console.WriteLine("Invalid Admin ID. Please try again.");
+                return false;
+            }
+            Console.Write("Enter Admin Password: ");
+            string adminPassword = ReadPassword();
+            if (adminPassword != AdminPassword)
+            {
+                Console.WriteLine("Invalid Admin Password. Please try again.");
+                return false;
+            }
+            Console.WriteLine("Admin login successful!");
+            return true;
+        }
 
 
         // Create Account Request
