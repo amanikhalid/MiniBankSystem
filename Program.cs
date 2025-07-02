@@ -321,6 +321,10 @@ namespace MiniBankSystem
                     case "4":
                         ViewPendingAccountRequests();
                         break;
+                    case "5":
+                        ProcessLoanRequests();
+                        break;
+
                     case "0":
                         inAdminMenu = false;
                         break;
