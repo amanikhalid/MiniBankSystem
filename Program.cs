@@ -573,6 +573,31 @@ namespace MiniBankSystem
             }
         }
 
+        static void ShowAverageUserFeedback()
+        {
+            Console.Clear();
+            Console.WriteLine("Average User Feedback");
+            Console.WriteLine(" ");
+            try
+            {
+                if (feedbackRatings.Count == 0)
+                {
+                    Console.WriteLine("No feedback ratings available.");
+                    return;
+                }
+                double averageRating = feedbackRatings.Average();
+                Console.WriteLine($"Average User Feedback Rating: {averageRating:F2}");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error: {e.Message}");
+            }
+            {
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+            }
+        }
+
 
 
         // Create Account Request
