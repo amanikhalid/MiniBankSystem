@@ -397,6 +397,31 @@ namespace MiniBankSystem
                     break;
             }
         }
+        static void SearchAccountsByName()
+        {
+            Console.Clear();
+            Console.WriteLine("Search Accounts by Name");
+            Console.Write("Enter name to search: ");
+            string nameToSearch = Console.ReadLine().Trim();
+            var results = accountNames
+                .Select((name, index) => new { Name = name, Index = index })
+                .Where(x => x.Name.IndexOf(nameToSearch, StringComparison.OrdinalIgnoreCase) >= 0)
+                .ToList();
+            if (results.Count > 0)
+            {
+                Console.WriteLine("Accounts found:");
+                foreach (var result in results)
+                {
+                    Console.WriteLine($"Account Number: {accountNumbers[result.Index]}, Name: {result.Name}, Balance: {accountBalances[result.Index]}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No accounts found with that name.");
+            }
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+        }
 
 
 
