@@ -462,6 +462,40 @@ namespace MiniBankSystem
             Console.ReadKey();
         }
 
+        static void UnlockLockedAccount()
+        {
+            Console.Clear();
+            Console.WriteLine("Unlock Locked Account");
+            Console.WriteLine(" ");
+            try
+            {
+                Console.WriteLine("Enter the National ID of the account to unlock:");
+                string nationalID = Console.ReadLine().Trim();
+                int index = accountNationalIDs.IndexOf(nationalID);
+                if (index == -1)
+                {
+                    Console.WriteLine("Account not found.");
+                    return;
+                }
+                if (!isLocked[index])
+                {
+                    Console.WriteLine("This account is not locked.");
+                    return;
+                }
+                isLocked[index] = false; // Unlock the account
+                failedLoginAttempts[index] = 0; // Reset failed login attempts
+                Console.WriteLine($"Account with National ID {nationalID} has been unlocked successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            {
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+            }
+        }
+
 
 
         // Create Account Request
