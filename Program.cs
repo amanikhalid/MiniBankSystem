@@ -693,6 +693,8 @@ namespace MiniBankSystem
             }
         }
 
+       
+
 
 
         // Create Account Request
@@ -813,65 +815,55 @@ namespace MiniBankSystem
                 //Process Next Account Request
                 static void ProcessNextAccountRequest()
                 {
-                    Console.Clear();
-                    Console.WriteLine("Processing Next Account Request");
-                    Console.WriteLine("");
-
-                    try
-                    {
-                        if (createAccountRequests.Count == 0) // check if there are any requests
-                        {
-                            Console.WriteLine("No pending account requests.");
-                            return;
-                        }
-                        else
-                        {
-                            string accountRequest = createAccountRequests.Dequeue(); // get the next request
-                            string[] parts = accountRequest.Split('|'); // split the request into name and national ID
-
-                            if (parts.Length != 3) // check if the request is valid
-                            {
-                                Console.WriteLine("Invalid account request format.");
-                                return;
-                            }
-
-                            string name = parts[0]; // get the name
-                            string nationalID = parts[1]; // get the national ID
-                              double balance = double.Parse(parts[2]);
-                            // validate name and ID
-                            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(nationalID))
-                            {
-                                Console.WriteLine("Invalid account request. Name and National ID cannot be empty.");
-                                return;
-                            }
-
-                            int newAccountNumber = lastAccountNumber + 1; // generate new account number
-                            accountNumbers.Add(newAccountNumber); // add account number to list
-                            accountNames.Add(name); // add name to list
-                            accountNationalIDs.Add(nationalID);
-                            accountBalances.Add(balance); // add initial balance to list
-                    accountNumbers.Add(newAccountNumber); // add account number to list
-                    lastAccountNumber = newAccountNumber; // update last account number
-                    
-                    Console.WriteLine($"Account created successfully for {name} with Account Number: {newAccountNumber}");
-                            Console.WriteLine($"National ID: {nationalID}");
-                            Console.WriteLine($"Your initial balance is: {accountBalances[accountBalances.Count - 1]}");
-
-                        }
-
-                    }
-                    catch (Exception e)
-                    { Console.WriteLine($"Error: {e.Message}"); }
-
-                    {
-                        Console.WriteLine("Press any key to continue");
-                        Console.ReadKey();
-                    }
+            {
+                if (createAccountRequests.Count == 0)
+                {
+                    Console.WriteLine("No pending account requests.");
+                    return;
                 }
 
+                string request = createAccountRequests.Dequeue();
+                string[] parts = request.Split('|');
+                string name = parts[0];
+                string nationalID = parts[1];
 
-                // Deposit Money
-                static void DepositMoney(string nationalID)
+                int newAccountNumber = lastAccountNumber + 1;
+
+                Console.Write("Set a password for the new account: ");
+                string password = ReadPassword();
+                string hash = HashPassword(password);
+
+                Console.Write("Enter your phone number: ");
+                string phone = Console.ReadLine();
+
+                Console.Write("Enter your address: ");
+                string address = Console.ReadLine();
+
+                accountNumbers.Add(newAccountNumber);
+                accountNames.Add(name.Trim()); // Remove any leading/trailing space
+                accountBalances.Add(0.0); // Initialize balance to 0.0
+                passwordHashes.Add(hash);
+                nationalIDs.Add(nationalID);
+                transactions.Add(new List<string>()); // Initialize transaction history
+                phoneNumbers.Add(phone);
+                addresses.Add(address);
+                hasAppointment.Add(false);
+                hasActiveLoan.Add(false);
+                loanAmounts.Add(0);
+                loanInterestRate.Add(0);
+                failedLoginAttempts.Add(0);
+                isLocked.Add(false);
+
+                lastAccountNumber = newAccountNumber;
+
+                Console.WriteLine($"Account created for {name} with Account Number: {newAccountNumber}");
+            }
+
+        }
+
+
+        // Deposit Money
+        static void DepositMoney(string nationalID)
                 {
                     Console.Clear();
                     Console.WriteLine("Deposit Money");
