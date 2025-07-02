@@ -297,6 +297,12 @@ namespace MiniBankSystem
                 Console.WriteLine("2. View Submitted Reviews");
                 Console.WriteLine("3. View All Accounts");
                 Console.WriteLine("4. View Pending Account Requests");
+                //Adding the new Features
+                Console.WriteLine("5. Process Loan Requests");
+                Console.WriteLine("6. View Average User Feedback");
+                Console.WriteLine("7. View Appointments");
+                Console.WriteLine("8. Unlock Locked Account");
+
                 Console.WriteLine("0. Return to Main Menu");
                 Console.Write("Select option: ");
                 string adminChoice = Console.ReadLine();
