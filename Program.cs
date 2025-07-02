@@ -330,6 +330,9 @@ namespace MiniBankSystem
                     case "7":
                         ViewAppointments();
                         break;
+                    case "8":
+                        UnlockLockedAccount();
+                        break;
 
 
 
