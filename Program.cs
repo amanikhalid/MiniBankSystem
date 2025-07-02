@@ -253,6 +253,9 @@ namespace MiniBankSystem
                     case "6":
                         GenerateMonthlyStatement();
                         break;
+                    case "7":
+                        UpdateContactInfo(loggedInNationalID); // Pass NationalID
+                        break;
                     case "0":
                         inUserMenu = false;
                         break;
