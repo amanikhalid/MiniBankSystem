@@ -67,6 +67,7 @@ namespace MiniBankSystem
             return password.ToString();
         }
 
+        static List<string>> transactions = new List<string>>(); // List to store transaction history
         // Account number generator
         static int lastAccountNumber;
         static void Main()
