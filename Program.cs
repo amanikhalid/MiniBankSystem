@@ -652,6 +652,46 @@ namespace MiniBankSystem
                 Console.ReadKey();
             }
         }
+        static void BookAppointment()
+        {
+            Console.Clear();
+            Console.WriteLine("Book Appointment");
+            Console.WriteLine(" ");
+            try
+            {
+                Console.WriteLine("Enter the reason for the appointment:");
+                string reason = Console.ReadLine().Trim();
+                if (string.IsNullOrWhiteSpace(reason))
+                {
+                    Console.WriteLine("Reason cannot be empty. Please try again.");
+                    return;
+                }
+                Console.WriteLine("Enter the date and time for the appointment (yyyy-MM-dd HH:mm):");
+                DateTime appointmentDate;
+                if (!DateTime.TryParse(Console.ReadLine(), out appointmentDate))
+                {
+                    Console.WriteLine("Invalid date format. Please try again.");
+                    return;
+                }
+                int accountIndex = GetAccountIndex(); // Get account index from user
+                if (accountIndex == -1)
+                {
+                    Console.WriteLine("Account not found. Please try again.");
+                    return;
+                }
+                appointmentRequests.Enqueue((accountIndex, appointmentDate, reason));
+                hasAppointment[accountIndex] = true; // Mark that this account has an appointment
+                Console.WriteLine("Appointment booked successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            {
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+            }
+        }
 
 
 
