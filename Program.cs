@@ -11,8 +11,11 @@ namespace MiniBankSystem
     {
         // constants
         const double MinimumBalance = 100.0;
-        const string AccountsFilePath = @"C:\Users\CodeLine\source\repos\MiniBankSystem\accounts.txt";
-        const string ReviewFilePath = @"C:\Users\CodeLine\source\repos\MiniBankSystem\reviews.txt";
+        const string AccountsFilePath = "accounts.txt";
+        const string ReviewFilePath = "reviews.txt"; // File to store reviews and complaints
+        const string AdminID = "admin"; // Admin ID for login
+        const string AdminPassword = "11992"; // Admin password for login
+
 
         //Global lists (parallel)
         static List<int> accountNumber = new List<int>();
