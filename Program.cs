@@ -598,6 +598,34 @@ namespace MiniBankSystem
             }
         }
 
+        static void BackupAccountsInformationToFile()
+        {
+            Console.Clear();
+            Console.WriteLine("Backup Accounts Information to File");
+            Console.WriteLine(" ");
+            try
+            {
+                string backupFilePath = "accounts_backup.txt";
+                using (StreamWriter writer = new StreamWriter(backupFilePath))
+                {
+                    for (int i = 0; i < accountNumbers.Count; i++)
+                    {
+                        string dataLine = $"{accountNumbers[i]}|{accountNationalIDs[i]}|{accountBalances[i]}";
+                        writer.WriteLine(dataLine);
+                    }
+                }
+                Console.WriteLine("Accounts information backed up successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error backing up accounts information: {ex.Message}");
+            }
+            {
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+            }
+        }
+
 
 
         // Create Account Request
