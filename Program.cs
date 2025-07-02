@@ -327,6 +327,10 @@ namespace MiniBankSystem
                     case "6":
                         ViewAverageUserFeedback();
                         break;
+                    case "7":
+                        ViewAppointments();
+                        break;
+
 
 
                     case "0":
