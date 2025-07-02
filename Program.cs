@@ -259,6 +259,10 @@ namespace MiniBankSystem
                     case "8":
                         RequestLoan(); // Pass NationalID
                         break;
+                    case "9":
+                        ViewTransactions(); // Pass NationalID
+                        break;
+
                     case "0":
                         inUserMenu = false;
                         break;
