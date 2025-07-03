@@ -777,15 +777,6 @@ namespace MiniBankSystem
                         return;
                     }
 
-                    // Enqueue and save
-                    string loanLine = $"{inputNationalId}:{loanAmount}:{interestRate}";
-                    loanRequests.Enqueue(loanLine);
-                    SaveLoanRequestsToFile();
-
-                    Console.WriteLine("Loan request submitted. Waiting admin approval.");
-                    Console.WriteLine("\nPress any key to return...");
-                    Console.ReadKey();
-                    return;
                 }
             }
 
