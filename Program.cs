@@ -796,6 +796,69 @@ namespace MiniBankSystem
             }
         }
 
+        static void ProcessLoanRequests()
+        {
+            Console.Clear();
+            Console.WriteLine("Process Loan Requests");
+            Console.WriteLine(" ");
+            try
+            {
+                if (loanRequests.Count == 0)
+                {
+                    Console.WriteLine("No pending loan requests.");
+                    return;
+                }
+                while (loanRequests.Count > 0)
+                {
+                    string request = loanRequests.Dequeue();
+                    string[] parts = request.Split(':');
+                    if (parts.Length != 3)
+                    {
+                        Console.WriteLine("Invalid loan request format.");
+                        continue;
+                    }
+                    string nationalID = parts[0];
+                    double loanAmount = double.Parse(parts[1]);
+                    double interestRate = double.Parse(parts[2]);
+                    Console.WriteLine($"Loan Request for National ID: {nationalID}, Amount: {loanAmount}, Interest Rate: {interestRate}%");
+                    Console.WriteLine("Approve or Reject this request? (Y/N): ");
+                    string choice = Console.ReadLine().Trim().ToUpper();
+                    if (choice == "Y")
+                    {
+                        int index = accountNationalIDs.IndexOf(nationalID);
+                        if (index == -1)
+                        {
+                            Console.WriteLine($"Account with National ID {nationalID} not found. Skipping request.");
+                            continue;
+                        }
+                        hasActiveLoan[index] = true; // Mark account as having an active loan
+                        loanAmounts[index] += loanAmount; // Add loan amount to account
+                        loanInterestRate[index] = interestRate; // Set interest rate for the account
+                        Console.WriteLine($"Loan approved for {nationalID}. New Loan Amount: {loanAmounts[index]} at {interestRate}% interest rate.");
+                    }
+                    else if (choice == "N")
+                    {
+                        Console.WriteLine($"Loan request for {nationalID} has been rejected.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid choice. Request not processed.");
+                    }
+                }
+                SaveAccountsInformationToFile(); // Save account information after processing requests
+                SaveLoanRequestsToFile(); // Save remaining loan requests
+                Console.WriteLine("Loan requests processed successfully.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error: {e.Message}");
+            }
+            {
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+            }
+        }
+
 
         static void ShowAverageUserFeedback()
             {
