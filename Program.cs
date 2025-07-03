@@ -653,9 +653,61 @@ namespace MiniBankSystem
             }
         }
 
+        static void UpdateContactInfo()
+        {
+            Console.Clear();
+            Console.WriteLine("Update Account Info");
+
+            Console.Write("Enter your National ID:");
+            string inputNationalId = Console.ReadLine();
+
+            string[] lines = File.ReadAllLines(AccountsFilePath);
+            bool found = false;
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string[] parts = lines[i].Split(':');
+                if (parts.Length >= 10 && parts[2] == inputNationalId)
+                {
+                    found = true;
+
+                    Console.WriteLine($"\nCurrent Phone   : {parts[8]}");
+                    Console.WriteLine($"Current Address : {parts[9]}");
+
+                    Console.Write("Enter new phone number (or press Enter to keep current): ");
+                    string newPhone = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(newPhone))
+                        parts[8] = newPhone;
+
+                    Console.Write("Enter new address (or press Enter to keep current): ");
+                    string newAddress = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(newAddress))
+                        parts[9] = newAddress;
+
+                    // Rebuild and update line
+                    lines[i] = string.Join(":", parts);
+
+                    // Write all lines back to file
+                    File.WriteAllLines(AccountsFilePath, lines);
+
+                    Console.WriteLine("\nAccount info updated successfully.");
+                    Console.WriteLine("\nPress any key to return...");
+                    Console.ReadKey();
+
+                    return;
+                }
+            }
+
+            if (!found)
+            {
+                Console.WriteLine("Account not found.");
+                Console.ReadKey();
+            }
+
+        }
 
 
-            static void ShowAverageUserFeedback()
+        static void ShowAverageUserFeedback()
             {
                 Console.Clear();
                 Console.WriteLine("Average User Feedback");
