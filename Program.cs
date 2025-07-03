@@ -397,6 +397,24 @@ namespace MiniBankSystem
                     break;
             }
         }
+        static void SaveReviews()
+        {
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(ReviewFilePath))
+                {
+                    foreach (var review in reviewStack)
+                    {
+                        writer.WriteLine(review);
+                    }
+                }
+                Console.WriteLine("Reviews saved successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving reviews: {ex.Message}");
+            }
+        }
 
         static void SearchAccountsByName()
         {
