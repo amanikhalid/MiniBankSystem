@@ -706,6 +706,96 @@ namespace MiniBankSystem
 
         }
 
+        static void RequestLoan()
+        {
+            Console.Clear();
+            Console.WriteLine("Request a Loan");
+
+            Console.Write("Enter your National ID: ");
+            string inputNationalId = Console.ReadLine();
+
+            if (!File.Exists("accounts.txt"))
+            {
+                Console.WriteLine("Accounts file not found.");
+                Console.ReadKey();
+                return;
+            }
+
+            string[] lines = File.ReadAllLines("accounts.txt");
+            bool found = false;
+
+            foreach (string line in lines)
+            {
+                string[] parts = line.Split(':');
+
+                if (parts.Length >= 10 && parts[2] == inputNationalId)
+                {
+                    found = true;
+
+                    // Check balance
+                    if (!double.TryParse(parts[3], out double balance))
+                    {
+                        Console.WriteLine("Error reading balance.");
+                        Console.ReadKey();
+                        return;
+                    }
+
+                    if (balance < 5000)
+                    {
+                        Console.WriteLine("You must have at least 5000 OMR to request a loan.");
+                        Console.ReadKey();
+                        return;
+                    }
+
+                    // Check if already has active loan
+                    if (File.Exists("active_loans.txt"))
+                    {
+                        string[] activeLoans = File.ReadAllLines("active_loans.txt");
+                        if (activeLoans.Contains(inputNationalId))
+                        {
+                            Console.WriteLine("You already have an active loan.");
+                            Console.ReadKey();
+                            return;
+                        }
+                    }
+
+                    // Enter loan amount
+                    Console.Write("Enter loan amount: ");
+                    if (!double.TryParse(Console.ReadLine(), out double loanAmount) || loanAmount <= 0)
+                    {
+                        Console.WriteLine("Invalid amount.");
+                        Console.ReadKey();
+                        return;
+                    }
+
+                    // Enter interest rate
+                    Console.Write("Enter interest rate (%): ");
+                    if (!double.TryParse(Console.ReadLine(), out double interestRate) || interestRate < 0)
+                    {
+                        Console.WriteLine("Invalid interest rate.");
+                        Console.ReadKey();
+                        return;
+                    }
+
+                    // Enqueue and save
+                    string loanLine = $"{inputNationalId}:{loanAmount}:{interestRate}";
+                    loanRequests.Enqueue(loanLine);
+                    SaveLoanRequestsToFile();
+
+                    Console.WriteLine("Loan request submitted. Waiting admin approval.");
+                    Console.WriteLine("\nPress any key to return...");
+                    Console.ReadKey();
+                    return;
+                }
+            }
+
+            if (!found)
+            {
+                Console.WriteLine("Account not found.");
+                Console.ReadKey();
+            }
+        }
+
 
         static void ShowAverageUserFeedback()
             {
