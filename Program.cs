@@ -67,7 +67,7 @@ namespace MiniBankSystem
             return password.ToString();
         }
 
-        static List<string>> transactions = new List<string>>(); // List to store transaction history
+        static List<string> transactions = new List<string>(); // List to store transaction history
         static List<string> phoneNumbers = new List<string>(); // List to store phone numbers
         static List<string> addresses = new List<string>(); // List to store addresses 
         static List<bool> hasActiveLoan = new List<bool>(); // List to track if the account has an active loan
@@ -75,7 +75,7 @@ namespace MiniBankSystem
         static List<double> loanInterestRate = new List<double>(); // List to store loan interest rates
         static List<int> feedbackRatings = new List<int>(); // List to store feedback ratings
 
-        static Queue<int accountIndex, double amount, double interestRate> loanRequests = new Queue<int, double, double>(); // Queue to store loan requests
+        static Queue<(int accountIndex, double amount, double interestRate)> loanRequests = new Queue<(int, double, double)>(); // Queue to store loan requests
         static Queue<(int accountIndex, DateTime appointmentDate, string appointmentReason)> appointmentRequests = new Queue<(int, DateTime, string)>(); // Queue to store appointment requests
         static List<bool> hasAppointment = new List<bool>(); // List to track if the account has an appointment
         static List<int> failedLoginAttempts = new List<int>(); // List to track failed login attempts 
@@ -397,6 +397,7 @@ namespace MiniBankSystem
                     break;
             }
         }
+
         static void SearchAccountsByName()
         {
             Console.Clear();
@@ -844,7 +845,6 @@ namespace MiniBankSystem
                 accountBalances.Add(0.0); // Initialize balance to 0.0
                 passwordHashes.Add(hash);
                 nationalIDs.Add(nationalID);
-                transactions.Add(new List<string>()); // Initialize transaction history
                 phoneNumbers.Add(phone);
                 addresses.Add(address);
                 hasAppointment.Add(false);
@@ -861,47 +861,7 @@ namespace MiniBankSystem
 
         }
 
-        static int Login()
-        {
-            Console.Clear();
-            Console.WriteLine("Login System");
-            Console.WriteLine(" ");
-            while (true)
-            {
-                Console.Write("Enter your National ID: ");
-                string nationalID = Console.ReadLine().Trim();
-                if (string.IsNullOrWhiteSpace(nationalID))
-                {
-                    Console.WriteLine("National ID cannot be empty. Please try again.");
-                    continue;
-                }
-                int index = accountNationalIDs.IndexOf(nationalID);
-                if (index == -1)
-                {
-                    Console.WriteLine("National ID not found. Please try again.");
-                    continue;
-                }
-                Console.Write("Enter your password: ");
-                string password = ReadPassword();
-                string hashedPassword = HashPassword(password);
-                if (hashedPassword != passwordHashes[index])
-                {
-                    failedLoginAttempts[index]++;
-                    if (failedLoginAttempts[index] >= 3)
-                    {
-                        isLocked[index] = true;
-                        Console.WriteLine("Account is locked due to too many failed login attempts.");
-                        return -1; // Account is locked
-                    }
-                    Console.WriteLine("Invalid password. Please try again.");
-                    continue;
-                }
-                // Reset failed attempts on successful login
-                failedLoginAttempts[index] = 0;
-                Console.WriteLine($"Login successful! Welcome, {accountNames[index]}.");
-                return index; // Return the index of the logged-in account
-            }
-        }
+      
 
 
         // Deposit Money
@@ -1016,39 +976,7 @@ namespace MiniBankSystem
                 Console.WriteLine("Press any key to continue");
                 Console.ReadKey();
             }
-
-
-            // Submit Review
-            static void SubmitReview()
-            {
-                Console.Clear();
-                Console.WriteLine("Submit Review or Complaint");
-                Console.WriteLine(" ");
-
-                try
-                {
-                    Console.WriteLine("Enter your review/complaint");
-                    string review = Console.ReadLine().Trim();
-
-                    if (string.IsNullOrWhiteSpace(review))
-                    {
-                        Console.WriteLine("Review cannot be empty. Please try again");
-                        return;
-                    }
-                    reviewStack.Push(review);
-                    Console.WriteLine("Your review has been submitted successfully");
-
-                }
-
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.ToString()); return;
-                }
-
-                Console.WriteLine("Press any key to continue");
-                Console.ReadKey();
-
-            }
+        
 
             // Process Next Account Request
             static void ProcessAccountRequests()
