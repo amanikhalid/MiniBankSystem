@@ -75,7 +75,8 @@ namespace MiniBankSystem
         static List<double> loanInterestRate = new List<double>(); // List to store loan interest rates
         static List<int> feedbackRatings = new List<int>(); // List to store feedback ratings
 
-        static Queue<(int accountIndex, double amount, double interestRate)> loanRequests = new Queue<(int, double, double)>(); // Queue to store loan requests
+        //static Queue<(int accountIndex, double amount, double interestRate)> loanRequests = new Queue<(int, double, double)>(); // Queue to store loan requests
+        static Queue<string> loanRequests = new Queue<string>(); // "nid:amount:interest"
         static Queue<(int accountIndex, DateTime appointmentDate, string appointmentReason)> appointmentRequests = new Queue<(int, DateTime, string)>(); // Queue to store appointment requests
         static List<bool> hasAppointment = new List<bool>(); // List to track if the account has an appointment
         static List<int> failedLoginAttempts = new List<int>(); // List to track failed login attempts 
@@ -260,7 +261,8 @@ namespace MiniBankSystem
                         RequestLoan(); // Pass NationalID
                         break;
                     case "9":
-                        ViewTransactions(); // Pass NationalID
+                        
+                        ViewTransactions(loggedInNationalID); // Pass NationalID
                         break;
                     case "10":
                         ViewTransactionHistory();
