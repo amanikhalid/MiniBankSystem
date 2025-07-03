@@ -877,6 +877,35 @@ namespace MiniBankSystem
                 Console.WriteLine($"Error saving loan requests: {ex.Message}");
             }
         }
+        static void LoadAccountsInformationFromFile()
+        {
+            if (File.Exists(AccountsFilePath))
+            {
+                string[] lines = File.ReadAllLines(AccountsFilePath);
+                foreach (string line in lines)
+                {
+                    string[] parts = line.Split('|');
+                    if (parts.Length < 10) continue; // Ensure there are enough parts
+                    accountNames.Add(parts[0]);
+                    accountNationalIDs.Add(parts[1]);
+                    if (double.TryParse(parts[2], out double balance))
+                        accountBalances.Add(balance);
+                    else
+                        accountBalances.Add(0.0); // Default to 0.0 if parsing fails
+                    passwordHashes.Add(parts[3]);
+                    phoneNumbers.Add(parts[4]);
+                    addresses.Add(parts[5]);
+                    hasAppointment.Add(bool.Parse(parts[6]));
+                    hasActiveLoan.Add(bool.Parse(parts[7]));
+                    loanAmounts.Add(double.Parse(parts[8]));
+                    loanInterestRate.Add(double.Parse(parts[9]));
+                    failedLoginAttempts.Add(int.Parse(parts[10]));
+                    isLocked.Add(bool.Parse(parts[11]));
+                    accountNumbers.Add(int.Parse(parts[12])); // Assuming the last part is the account number
+                }
+                lastAccountNumber = accountNumbers.Count > 0 ? accountNumbers.Max() : 0; // Set lastAccountNumber based on existing accounts
+            }
+        }
 
 
         static void ShowAverageUserFeedback()
