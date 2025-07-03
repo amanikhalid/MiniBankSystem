@@ -859,6 +859,25 @@ namespace MiniBankSystem
             }
         }
 
+        static void SaveLoanRequestsToFile()
+        {
+            try
+            {
+                using (StreamWriter writer = new StreamWriter("loan_requests.txt"))
+                {
+                    foreach (var request in loanRequests)
+                    {
+                        writer.WriteLine(request);
+                    }
+                }
+                Console.WriteLine("Loan requests saved successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving loan requests: {ex.Message}");
+            }
+        }
+
 
         static void ShowAverageUserFeedback()
             {
