@@ -130,8 +130,8 @@ namespace MiniBankSystem
             Console.WriteLine("Thank you for using the SafeBank System. Goodbye!");
             Console.ReadKey();
         }
-    
-         
+
+
         // ------------------------------------------------------------------
 
         static string Login()
@@ -221,10 +221,10 @@ namespace MiniBankSystem
                 Console.WriteLine("4. Check/View Balance");
                 Console.WriteLine("5. Submit Review/Complaint");
                 // Adding the new Features
-                Console.WriteLine("6. Generate Monthly Statement"); 
+                Console.WriteLine("6. Generate Monthly Statement");
                 Console.WriteLine("7. Update My Contact Info");
                 Console.WriteLine("8. Request a Loan");
-                Console.WriteLine("9. View Transaction History"); 
+                Console.WriteLine("9. View Transaction History");
                 Console.WriteLine("10. View Transaction History");
                 Console.WriteLine("11. Book Appointment");
                 Console.WriteLine("12. LINQ Tools (Search/Sort)");
@@ -592,379 +592,442 @@ namespace MiniBankSystem
             }
         }
 
-        static void ShowAverageUserFeedback()
+        static void GenerateMonthlyStatement()
         {
-            Console.Clear();
-            Console.WriteLine("Average User Feedback");
-            Console.WriteLine(" ");
-            try
             {
-                if (feedbackRatings.Count == 0)
+                Console.Clear();
+                Console.WriteLine("Monthly Statement Generator");
+                Console.Write("Enter your account number: ");
+                if (!int.TryParse(Console.ReadLine(), out int accNum))
                 {
-                    Console.WriteLine("No feedback ratings available.");
+                    Console.WriteLine("Invalid account number.");
+                    Console.ReadKey();
                     return;
                 }
-                double averageRating = feedbackRatings.Average();
-                Console.WriteLine($"Average User Feedback Rating: {averageRating:F2}");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Error: {e.Message}");
-            }
-            {
-                Console.WriteLine("Press any key to continue...");
-                Console.ReadKey();
-            }
-        }
-
-        static void BackupAccountsInformationToFile()
-        {
-            Console.Clear();
-            Console.WriteLine("Backup Accounts Information to File");
-            Console.WriteLine(" ");
-            try
-            {
-                string backupFilePath = "accounts_backup.txt";
-                using (StreamWriter writer = new StreamWriter(backupFilePath))
+                Console.Write("Enter month (1-12): ");
+                if (!int.TryParse(Console.ReadLine(), out int month) || month < 1 || month > 12)
                 {
-                    for (int i = 0; i < accountNumbers.Count; i++)
+                    Console.WriteLine("Invalid month.");
+                    Console.ReadKey();
+                    return;
+                }
+                Console.Write("Enter year (e.g. 2025): ");
+                if (!int.TryParse(Console.ReadLine(), out int year))
+                {
+                    Console.WriteLine("Invalid year.");
+                    Console.ReadKey();
+                    return;
+                }
+                string transactionFile = "transactions.txt";
+                if (!File.Exists(transactionFile))
+                {
+                    Console.WriteLine("Transaction file not found.");
+                    Console.ReadKey();
+                    return;
+                }
+                string[] lines = File.ReadAllLines(transactionFile);
+                List<string> statement = new List<string>();
+                foreach (string line in lines)
+                {
+                    string[] parts = line.Split('|');
+                    if (parts.Length != 5) continue;
+                    if (!int.TryParse(parts[0], out int logAcc)) continue;
+                    if (!DateTime.TryParse(parts[4], out DateTime logDate)) continue;
+                    if (logAcc == accNum && logDate.Month == month && logDate.Year == year)
                     {
-                        string dataLine = $"{accountNumbers[i]}|{accountNationalIDs[i]}|{accountBalances[i]}";
-                        writer.WriteLine(dataLine);
+                        statement.Add(line);
                     }
                 }
-                Console.WriteLine("Accounts information backed up successfully.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error backing up accounts information: {ex.Message}");
-            }
-            {
-                Console.WriteLine("Press any key to continue...");
+                if (statement.Count == 0)
+                {
+                    Console.WriteLine("No transactions found for this account in that month.");
+                }
+                else
+                {
+                    string filename = $"Statement_Acc{accNum}_{year}-{month:D2}.txt";
+                    File.WriteAllLines(filename, statement);
+                    Console.WriteLine($"\nStatement saved to: {filename}");
+                }
+                Console.WriteLine("\nPress any key to return...");
                 Console.ReadKey();
             }
         }
 
-        static void ViewTransactionHistory()
-        {
-            Console.Clear();
-            Console.WriteLine("View Transaction History");
-            Console.WriteLine(" ");
-            try
-            {
-                if (transactions.Count == 0)
-                {
-                    Console.WriteLine("No transactions found.");
-                    return;
-                }
-                foreach (var transaction in transactions)
-                {
-                    Console.WriteLine(transaction);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-            }
-            {
-                Console.WriteLine("Press any key to continue...");
-                Console.ReadKey();
-            }
-        }
-        static void BookAppointment()
-        {
-            Console.Clear();
-            Console.WriteLine("Book Appointment");
-            Console.WriteLine(" ");
-            try
-            {
-                Console.WriteLine("Enter the reason for the appointment:");
-                string reason = Console.ReadLine().Trim();
-                if (string.IsNullOrWhiteSpace(reason))
-                {
-                    Console.WriteLine("Reason cannot be empty. Please try again.");
-                    return;
-                }
-                Console.WriteLine("Enter the date and time for the appointment (yyyy-MM-dd HH:mm):");
-                DateTime appointmentDate;
-                if (!DateTime.TryParse(Console.ReadLine(), out appointmentDate))
-                {
-                    Console.WriteLine("Invalid date format. Please try again.");
-                    return;
-                }
-                int accountIndex = GetAccountIndex(); // Get account index from user
-                if (accountIndex == -1)
-                {
-                    Console.WriteLine("Account not found. Please try again.");
-                    return;
-                }
-                appointmentRequests.Enqueue((accountIndex, appointmentDate, reason));
-                hasAppointment[accountIndex] = true; // Mark that this account has an appointment
-                Console.WriteLine("Appointment booked successfully.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-            }
-            {
-                Console.WriteLine("Press any key to continue...");
-                Console.ReadKey();
-            }
-        }
-
-       
 
 
-
-        // Create Account Request
-        static void CreateAccountRequests()
+            static void ShowAverageUserFeedback()
+            {
+                Console.Clear();
+                Console.WriteLine("Average User Feedback");
+                Console.WriteLine(" ");
+                try
                 {
-                    Console.Clear();
-                    Console.WriteLine("Create Account Request");
-                    Console.WriteLine(" ");
-
-                    bool validName = false;
-                    bool validNationalID = false;
-                    bool validInitialBalance = false;
-                    string name = "";
-                    string nationalID = "";
-                    double initialBalance = 0.0;
-
-                    try
+                    if (feedbackRatings.Count == 0)
                     {
-                        while (!validName) // Check if name is valid
-                        {
-                            Console.WriteLine("Enter your name:");
-                            name = Console.ReadLine();
-                            if (string.IsNullOrWhiteSpace(name))
-                            {
-                                Console.WriteLine("Name cannot be empty. Please try again.");
-                            }
-                            else if (int.TryParse(name, out _))
-                            {
-                                Console.WriteLine("Name cannot be a number. Please try again.");
-                            }
-                            else if (name.Length < 3)
-                            {
-                                Console.WriteLine("Name must be at least 3 characters long. Please try again.");
-                            }
-                            else
-                            {
-                                validName = true;
-                            }
-                        }
-
-                        while (!validNationalID) // Get and validate National ID
-                        {
-                            Console.WriteLine("Enter your National ID: ");
-                            nationalID = Console.ReadLine();
-
-                            if (string.IsNullOrWhiteSpace(nationalID))
-                            {
-                                Console.WriteLine("National ID cannot be empty. Please try again.");
-                            }
-                            else if (!long.TryParse(nationalID, out _))
-                            {
-                                Console.WriteLine("National ID must be a number. Please try again.");
-                            }
-                            else if (accountNationalIDs.Contains(nationalID))
-                            {
-                                Console.WriteLine("An account with this National ID already exists.");
-                            }
-                            else if (createAccountRequests.Any(r => r.Split('|')[1] == nationalID))
-                            {
-                                Console.WriteLine("An account request with this National ID is already pending.");
-                            }
-                            else
-                            {
-                                validNationalID = true;
-                            }
-                        }
-
-                        while (!validInitialBalance) // Get and validate Initial Balance
-                        {
-                            Console.WriteLine("Enter your initial balance: ");
-                            string input = Console.ReadLine();
-
-                            if (string.IsNullOrWhiteSpace(input))
-                            {
-                                Console.WriteLine("Initial balance cannot be empty. Please try again.");
-                            }
-                            else if (!double.TryParse(input, out initialBalance))
-                            {
-                                Console.WriteLine("Initial balance must be a number. Please try again.");
-                            }
-                            else if (initialBalance < MinimumBalance)
-                            {
-                                Console.WriteLine($"Initial balance must be at least {MinimumBalance}. Please try again.");
-                            }
-                            else
-                            {
-                                validInitialBalance = true;
-                            }
-                        }
-
-                        // After all validations passed
-                        string accountRequest = $"{name}|{nationalID}|{initialBalance}";
-                        createAccountRequests.Enqueue(accountRequest);
-
-                        // Save to file
-                        //File.AppendAllText(AccountsFilePath, $"{name}|{nationalID}|{initialBalance}\n");
-
-
-
-                        Console.WriteLine($"Account request for {name} with National ID {nationalID} has been submitted successfully.");
-                Console.WriteLine();
-
-            }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error: {ex.Message}");
+                        Console.WriteLine("No feedback ratings available.");
+                        return;
                     }
-                    
+                    double averageRating = feedbackRatings.Average();
+                    Console.WriteLine($"Average User Feedback Rating: {averageRating:F2}");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Error: {e.Message}");
+                }
+                {
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
+                }
+            }
+
+            static void BackupAccountsInformationToFile()
+            {
+                Console.Clear();
+                Console.WriteLine("Backup Accounts Information to File");
+                Console.WriteLine(" ");
+                try
+                {
+                    string backupFilePath = "accounts_backup.txt";
+                    using (StreamWriter writer = new StreamWriter(backupFilePath))
                     {
-                        Console.WriteLine("Press any key to continue...");
-                        Console.ReadKey();
+                        for (int i = 0; i < accountNumbers.Count; i++)
+                        {
+                            string dataLine = $"{accountNumbers[i]}|{accountNationalIDs[i]}|{accountBalances[i]}";
+                            writer.WriteLine(dataLine);
+                        }
+                    }
+                    Console.WriteLine("Accounts information backed up successfully.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error backing up accounts information: {ex.Message}");
+                }
+                {
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
+                }
+            }
+
+            static void ViewTransactionHistory()
+            {
+                Console.Clear();
+                Console.WriteLine("View Transaction History");
+                Console.WriteLine(" ");
+                try
+                {
+                    if (transactions.Count == 0)
+                    {
+                        Console.WriteLine("No transactions found.");
+                        return;
+                    }
+                    foreach (var transaction in transactions)
+                    {
+                        Console.WriteLine(transaction);
                     }
                 }
-
-       
-
-
-                //Process Next Account Request
-                static void ProcessNextAccountRequest()
+                catch (Exception ex)
                 {
-            {
-                if (createAccountRequests.Count == 0)
-                {
-                    Console.WriteLine("No pending account requests.");
-                    return;
+                    Console.WriteLine($"Error: {ex.Message}");
                 }
-
-                string request = createAccountRequests.Dequeue();
-                string[] parts = request.Split('|');
-                string name = parts[0];
-                string nationalID = parts[1];
-
-                int newAccountNumber = lastAccountNumber + 1;
-
-                Console.Write("Set a password for the new account: ");
-                string password = ReadPassword();
-                string hash = HashPassword(password);
-
-                Console.Write("Enter your phone number: ");
-                string phone = Console.ReadLine();
-
-                Console.Write("Enter your address: ");
-                string address = Console.ReadLine();
-
-                accountNumbers.Add(newAccountNumber);
-                accountNames.Add(name.Trim()); // Remove any leading/trailing space
-                accountBalances.Add(0.0); // Initialize balance to 0.0
-                passwordHashes.Add(hash);
-                nationalIDs.Add(nationalID);
-                phoneNumbers.Add(phone);
-                addresses.Add(address);
-                hasAppointment.Add(false);
-                hasActiveLoan.Add(false);
-                loanAmounts.Add(0);
-                loanInterestRate.Add(0);
-                failedLoginAttempts.Add(0);
-                isLocked.Add(false);
-
-                lastAccountNumber = newAccountNumber;
-
-                Console.WriteLine($"Account created for {name} with Account Number: {newAccountNumber}");
+                {
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
+                }
+            }
+            static void BookAppointment()
+            {
+                Console.Clear();
+                Console.WriteLine("Book Appointment");
+                Console.WriteLine(" ");
+                try
+                {
+                    Console.WriteLine("Enter the reason for the appointment:");
+                    string reason = Console.ReadLine().Trim();
+                    if (string.IsNullOrWhiteSpace(reason))
+                    {
+                        Console.WriteLine("Reason cannot be empty. Please try again.");
+                        return;
+                    }
+                    Console.WriteLine("Enter the date and time for the appointment (yyyy-MM-dd HH:mm):");
+                    DateTime appointmentDate;
+                    if (!DateTime.TryParse(Console.ReadLine(), out appointmentDate))
+                    {
+                        Console.WriteLine("Invalid date format. Please try again.");
+                        return;
+                    }
+                    int accountIndex = GetAccountIndex(); // Get account index from user
+                    if (accountIndex == -1)
+                    {
+                        Console.WriteLine("Account not found. Please try again.");
+                        return;
+                    }
+                    appointmentRequests.Enqueue((accountIndex, appointmentDate, reason));
+                    hasAppointment[accountIndex] = true; // Mark that this account has an appointment
+                    Console.WriteLine("Appointment booked successfully.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
+                {
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
+                }
             }
 
-        }
-
-      
 
 
-        // Deposit Money
-        static void DepositMoney(string nationalID)
+
+
+            // Create Account Request
+            static void CreateAccountRequests()
+            {
+                Console.Clear();
+                Console.WriteLine("Create Account Request");
+                Console.WriteLine(" ");
+
+                bool validName = false;
+                bool validNationalID = false;
+                bool validInitialBalance = false;
+                string name = "";
+                string nationalID = "";
+                double initialBalance = 0.0;
+
+                try
                 {
-                    Console.Clear();
-                    Console.WriteLine("Deposit Money");
-                    Console.WriteLine(" ");
-
-                    int index = accountNationalIDs.IndexOf(nationalID); // find index by national ID
-                    if (index == -1)
+                    while (!validName) // Check if name is valid
                     {
-                        Console.WriteLine("Account not found");
-                        Console.WriteLine("Press any key to continue");
-                        Console.ReadKey();
+                        Console.WriteLine("Enter your name:");
+                        name = Console.ReadLine();
+                        if (string.IsNullOrWhiteSpace(name))
+                        {
+                            Console.WriteLine("Name cannot be empty. Please try again.");
+                        }
+                        else if (int.TryParse(name, out _))
+                        {
+                            Console.WriteLine("Name cannot be a number. Please try again.");
+                        }
+                        else if (name.Length < 3)
+                        {
+                            Console.WriteLine("Name must be at least 3 characters long. Please try again.");
+                        }
+                        else
+                        {
+                            validName = true;
+                        }
+                    }
+
+                    while (!validNationalID) // Get and validate National ID
+                    {
+                        Console.WriteLine("Enter your National ID: ");
+                        nationalID = Console.ReadLine();
+
+                        if (string.IsNullOrWhiteSpace(nationalID))
+                        {
+                            Console.WriteLine("National ID cannot be empty. Please try again.");
+                        }
+                        else if (!long.TryParse(nationalID, out _))
+                        {
+                            Console.WriteLine("National ID must be a number. Please try again.");
+                        }
+                        else if (accountNationalIDs.Contains(nationalID))
+                        {
+                            Console.WriteLine("An account with this National ID already exists.");
+                        }
+                        else if (createAccountRequests.Any(r => r.Split('|')[1] == nationalID))
+                        {
+                            Console.WriteLine("An account request with this National ID is already pending.");
+                        }
+                        else
+                        {
+                            validNationalID = true;
+                        }
+                    }
+
+                    while (!validInitialBalance) // Get and validate Initial Balance
+                    {
+                        Console.WriteLine("Enter your initial balance: ");
+                        string input = Console.ReadLine();
+
+                        if (string.IsNullOrWhiteSpace(input))
+                        {
+                            Console.WriteLine("Initial balance cannot be empty. Please try again.");
+                        }
+                        else if (!double.TryParse(input, out initialBalance))
+                        {
+                            Console.WriteLine("Initial balance must be a number. Please try again.");
+                        }
+                        else if (initialBalance < MinimumBalance)
+                        {
+                            Console.WriteLine($"Initial balance must be at least {MinimumBalance}. Please try again.");
+                        }
+                        else
+                        {
+                            validInitialBalance = true;
+                        }
+                    }
+
+                    // After all validations passed
+                    string accountRequest = $"{name}|{nationalID}|{initialBalance}";
+                    createAccountRequests.Enqueue(accountRequest);
+
+                    // Save to file
+                    //File.AppendAllText(AccountsFilePath, $"{name}|{nationalID}|{initialBalance}\n");
+
+
+
+                    Console.WriteLine($"Account request for {name} with National ID {nationalID} has been submitted successfully.");
+                    Console.WriteLine();
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
+
+                {
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
+                }
+            }
+
+
+
+
+            //Process Next Account Request
+            static void ProcessNextAccountRequest()
+            {
+                {
+                    if (createAccountRequests.Count == 0)
+                    {
+                        Console.WriteLine("No pending account requests.");
                         return;
                     }
 
-                    try
-                    {
-                        Console.WriteLine("Enter the amount to deposit:");
-                        string input = Console.ReadLine();
+                    string request = createAccountRequests.Dequeue();
+                    string[] parts = request.Split('|');
+                    string name = parts[0];
+                    string nationalID = parts[1];
 
-                        if (string.IsNullOrWhiteSpace(input) || !double.TryParse(input, out double amount) || amount <= 0)
-                        {
-                            Console.WriteLine("Invalid amount. Please enter a positive number.");
-                            return;
-                        }
+                    int newAccountNumber = lastAccountNumber + 1;
 
-                        accountBalances[index] += amount;
-                        Console.WriteLine($"Deposit successful. New balance : {accountBalances[index]}");
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine($"Error: {e.Message}");
-                    }
-                    Console.WriteLine("Press any key to continue");
-                    Console.ReadKey();
+                    Console.Write("Set a password for the new account: ");
+                    string password = ReadPassword();
+                    string hash = HashPassword(password);
+
+                    Console.Write("Enter your phone number: ");
+                    string phone = Console.ReadLine();
+
+                    Console.Write("Enter your address: ");
+                    string address = Console.ReadLine();
+
+                    accountNumbers.Add(newAccountNumber);
+                    accountNames.Add(name.Trim()); // Remove any leading/trailing space
+                    accountBalances.Add(0.0); // Initialize balance to 0.0
+                    passwordHashes.Add(hash);
+                    nationalIDs.Add(nationalID);
+                    phoneNumbers.Add(phone);
+                    addresses.Add(address);
+                    hasAppointment.Add(false);
+                    hasActiveLoan.Add(false);
+                    loanAmounts.Add(0);
+                    loanInterestRate.Add(0);
+                    failedLoginAttempts.Add(0);
+                    isLocked.Add(false);
+
+                    lastAccountNumber = newAccountNumber;
+
+                    Console.WriteLine($"Account created for {name} with Account Number: {newAccountNumber}");
                 }
 
+            }
 
 
-                // Withdraw Money
-                static void WithdrawMoney(string nationalID)
+
+
+            // Deposit Money
+            static void DepositMoney(string nationalID)
+            {
+                Console.Clear();
+                Console.WriteLine("Deposit Money");
+                Console.WriteLine(" ");
+
+                int index = accountNationalIDs.IndexOf(nationalID); // find index by national ID
+                if (index == -1)
                 {
-                    Console.Clear();
-                    Console.WriteLine("Withdraw Money");
-                    Console.WriteLine(" ");
+                    Console.WriteLine("Account not found");
+                    Console.WriteLine("Press any key to continue");
+                    Console.ReadKey();
+                    return;
+                }
 
-                    int index = accountNationalIDs.IndexOf(nationalID);
-                    if (index == -1)
+                try
+                {
+                    Console.WriteLine("Enter the amount to deposit:");
+                    string input = Console.ReadLine();
+
+                    if (string.IsNullOrWhiteSpace(input) || !double.TryParse(input, out double amount) || amount <= 0)
                     {
-                        Console.WriteLine("Account not found");
-                        Console.WriteLine("Press any key to continue");
-                        Console.ReadKey();
+                        Console.WriteLine("Invalid amount. Please enter a positive number.");
                         return;
                     }
 
-                    try
-                    {
-                        Console.WriteLine("Enter the amount to withdraw:");
-                        string input = Console.ReadLine();
+                    accountBalances[index] += amount;
+                    Console.WriteLine($"Deposit successful. New balance : {accountBalances[index]}");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Error: {e.Message}");
+                }
+                Console.WriteLine("Press any key to continue");
+                Console.ReadKey();
+            }
 
-                        if (string.IsNullOrWhiteSpace(input) || !double.TryParse(input, out double amount) || amount <= 0)
-                        {
-                            Console.WriteLine("Invalid amount. Please enter a positive number.");
-                            return;
-                        }
 
-                        if (accountBalances[index] - amount < MinimumBalance)
-                        {
-                            Console.WriteLine($"Withdrawal denied. Minimum balance of {MinimumBalance} must be maintained.");
-                            return;
-                        }
 
-                        accountBalances[index] -= amount;
-                        Console.WriteLine($"Withdrawal successful. New balance: {accountBalances[index]}");
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine($"Error: {e.Message}");
-                    }
+            // Withdraw Money
+            static void WithdrawMoney(string nationalID)
+            {
+                Console.Clear();
+                Console.WriteLine("Withdraw Money");
+                Console.WriteLine(" ");
+
+                int index = accountNationalIDs.IndexOf(nationalID);
+                if (index == -1)
+                {
+                    Console.WriteLine("Account not found");
                     Console.WriteLine("Press any key to continue");
                     Console.ReadKey();
+                    return;
                 }
+
+                try
+                {
+                    Console.WriteLine("Enter the amount to withdraw:");
+                    string input = Console.ReadLine();
+
+                    if (string.IsNullOrWhiteSpace(input) || !double.TryParse(input, out double amount) || amount <= 0)
+                    {
+                        Console.WriteLine("Invalid amount. Please enter a positive number.");
+                        return;
+                    }
+
+                    if (accountBalances[index] - amount < MinimumBalance)
+                    {
+                        Console.WriteLine($"Withdrawal denied. Minimum balance of {MinimumBalance} must be maintained.");
+                        return;
+                    }
+
+                    accountBalances[index] -= amount;
+                    Console.WriteLine($"Withdrawal successful. New balance: {accountBalances[index]}");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Error: {e.Message}");
+                }
+                Console.WriteLine("Press any key to continue");
+                Console.ReadKey();
+            }
 
             // View Balance
             static void ViewBalance(string nationalID)
@@ -994,7 +1057,7 @@ namespace MiniBankSystem
                 Console.WriteLine("Press any key to continue");
                 Console.ReadKey();
             }
-        
+
 
             // Process Next Account Request
             static void ProcessAccountRequests()
@@ -1408,19 +1471,20 @@ namespace MiniBankSystem
                     Console.ReadKey();
                 }
             }
-        static void generateNumber()
-        {
-            Random randomNumber = new Random();
-            lastAccountNumber = randomNumber.Next(1, 9000); // Generate a random account number
-            while (accountNumbers.Contains(lastAccountNumber)) // Ensure the number is unique
+            static void generateNumber()
             {
-                lastAccountNumber = randomNumber.Next(1, 9000);
+                Random randomNumber = new Random();
+                lastAccountNumber = randomNumber.Next(1, 9000); // Generate a random account number
+                while (accountNumbers.Contains(lastAccountNumber)) // Ensure the number is unique
+                {
+                    lastAccountNumber = randomNumber.Next(1, 9000);
+                }
+                accountNumbers.Add(lastAccountNumber); // Add the new account number to the list
+
             }
-            accountNumbers.Add(lastAccountNumber); // Add the new account number to the list
 
         }
-
     }
-    }
+}
 
 
